@@ -13,18 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ait.app.model.Customer;
 import com.ait.app.repository.CustomerRepository;
+import com.ait.app.service.CustomerService;
 
 @RestController
 @RequestMapping("api/customers")
 public class CustomerController {
 
     @Autowired
-    CustomerRepository customerRepository;
+    CustomerService customerService;
 
     @PostMapping("addCustomer")
     ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
 
-        Customer savedCustomer = customerRepository.save(customer);
+        Customer savedCustomer = customerService.addCustomer(customer);
 
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
@@ -32,7 +33,7 @@ public class CustomerController {
     @GetMapping("getAllCustomers")
     ResponseEntity<List<Customer>> getAllCustomers() {
 
-        List<Customer> list = customerRepository.findAll();
+        List<Customer> list = customerService.getAllCustomers();
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
