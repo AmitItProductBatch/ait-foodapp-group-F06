@@ -60,7 +60,7 @@ pipeline {
         // ---------------------------------------------------------------------
         stage('Build Backend') {
             steps {
-                dir('food-delivery-backend') {
+                dir('food-delivery-backend/food-delivery-backend') {
                     echo "☕ Packaging Spring Boot Backend with Maven Wrapper..."
                     script {
                         if (isUnix()) {
