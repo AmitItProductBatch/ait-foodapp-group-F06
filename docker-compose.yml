@@ -29,9 +29,9 @@ services:
   # Spring Boot Backend API Service
   # ============================================================================
   backend:
-    build:
-      context: ./food-delivery-backend
-      dockerfile: Dockerfile
+  build:
+    context: ./food-delivery-backend/food-delivery-backend
+    dockerfile: Dockerfile
     container_name: fooddelivery-backend-06
     restart: unless-stopped
     ports:
