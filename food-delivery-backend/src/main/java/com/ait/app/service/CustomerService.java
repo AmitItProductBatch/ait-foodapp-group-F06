@@ -17,4 +17,6 @@ public interface CustomerService {
     CustomerProfileResponseDto  getCustomer(int id);
     
     CustomerDto updateProfile(int id,UpdateProfileDto updateProfileDto);
+    
+    public void deleteUserByID (int id);
 }

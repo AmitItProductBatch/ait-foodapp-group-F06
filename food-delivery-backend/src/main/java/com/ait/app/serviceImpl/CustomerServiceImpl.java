@@ -93,8 +93,18 @@ public class CustomerServiceImpl implements CustomerService {
 		    return customerDto;
 		    
 
-		  	
-
-	
 	}
+
+	@Override
+	public void deleteUserByID(int id) {
+
+        if (!customerRepository.existsById(id)) {
+            throw new CustomerException("customer not found", HttpStatus.NOT_FOUND);
+        }
+
+        customerRepository.deleteById(id);
+
+		
+	}
+	
 }
