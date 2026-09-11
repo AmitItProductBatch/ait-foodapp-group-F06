@@ -1,5 +1,7 @@
 package com.ait.app.serviceImpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 		dto.setUserId(savedRestaurant.getUser().getId());
 		return dto;
 		
+	}
+
+	@Override
+	public List<Restaurant> GetAllRestaurant() {
+		List<Restaurant> restaurants = restaurantRepository.findAll();
+		return restaurants;
 	}
 
 }
