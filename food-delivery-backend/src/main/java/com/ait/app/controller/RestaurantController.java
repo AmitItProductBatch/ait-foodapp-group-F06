@@ -25,13 +25,18 @@ public class RestaurantController {
 		RestaurantDto dto = restaurantService.addRestaurant(restaurantDto);
 		return new ResponseEntity(dto, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("viewRestaurant")
-	ResponseEntity<List<Restaurant>> GetAllRestaurant()
-	{
+	ResponseEntity<List<Restaurant>> GetAllRestaurant() {
 		List<Restaurant> restaurant = restaurantService.GetAllRestaurant();
 		return new ResponseEntity<List<Restaurant>>(restaurant, HttpStatus.OK);
 	}
-	
-}
 
+	@GetMapping("getRestaurant/{id}")
+	ResponseEntity<Restaurant> getRestaurant(@PathVariable int id) {
+
+		Restaurant restaurant = restaurantService.getRestaurant(id);
+		return new ResponseEntity<Restaurant>(restaurant, HttpStatus.OK);
+	}
+
+}
