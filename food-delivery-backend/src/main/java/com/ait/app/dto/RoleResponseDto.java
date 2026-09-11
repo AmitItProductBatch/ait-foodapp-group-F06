@@ -2,15 +2,15 @@ package com.ait.app.dto;
 
 public class RoleResponseDto {
 
-	private int id;
+	private int Id;
 	private String name;
 	private String description;
 	
 	public int getId() {
-		return id;
+		return Id;
 	}
 	public void setId(int id) {
-		this.id = id;
+		Id = id;
 	}
 	public String getName() {
 		return name;

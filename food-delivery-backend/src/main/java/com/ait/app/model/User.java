@@ -10,7 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
 	@Id
@@ -19,34 +19,73 @@ public class User {
 
 	private String name;
 
-	private String description;
+	private String address;
+	private String email;
+	
 
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Role> roles = new ArrayList<>();
+	private List<Role> role ;
+
+
 
 	public int getId() {
 		return id;
 	}
 
+
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
+
 
 	public String getName() {
 		return name;
 	}
 
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+
+
+	public String getAddress() {
+		return address;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
+
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+
+	public List<Role> getRole() {
+		return role;
+	}
+
+
+
+	public void setRole(List<Role> role) {
+		this.role = role;
+	}
+
 
 }
