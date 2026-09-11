@@ -9,5 +9,7 @@ public interface RestaurantService {
 	public RestaurantDto addRestaurant(RestaurantDto restaurantDto);
 
 	public List<Restaurant> GetAllRestaurant();
+	
+	public Restaurant getRestaurant(int id);
 
 }
