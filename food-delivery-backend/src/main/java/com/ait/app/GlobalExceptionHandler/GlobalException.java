@@ -10,6 +10,7 @@ import com.ait.app.exception.CustomerException;
 
 import com.ait.app.exception.CustomerProfileException;
 import com.ait.app.exception.DuplicateRoleException;
+import com.ait.app.exception.FoodItemException;
 import com.ait.app.exception.RestaurantException;
 import com.ait.app.exception.RoleValidationException;
 import com.ait.app.exception.UpdateCustomerProfileException;
@@ -57,6 +58,8 @@ public class GlobalException {
 
 	}
     
+    
+   
 	
 	
 	

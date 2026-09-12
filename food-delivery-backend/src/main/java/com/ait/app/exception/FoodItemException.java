@@ -2,9 +2,10 @@ package com.ait.app.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class RestaurantException extends RuntimeException {
+public class FoodItemException {
 
 	private String errorMessage;
+
 	private HttpStatus httpStatus;
 
 	public String getErrorMessage() {
@@ -15,15 +16,11 @@ public class RestaurantException extends RuntimeException {
 		return httpStatus;
 	}
 
-	public RestaurantException(String errorMessage, HttpStatus httpStatus) {
-
+	public FoodItemException(String errorMessage, HttpStatus httpStatus) {
 		this.errorMessage = errorMessage;
-		this.httpStatus = httpStatus;
-	}
-
-	public RestaurantException(HttpStatus httpStatus) {
 
 		this.httpStatus = httpStatus;
 	}
 
+	
 }
