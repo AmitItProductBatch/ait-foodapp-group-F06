@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,4 +38,13 @@ public class FoodItemController {
 		List<FoodItem> list = foodItemService.getAllFoodItems(restaurantId);
 		return new ResponseEntity(list, HttpStatus.OK);
 	}
+	
+	@PutMapping("udateFoodItem/{id}")
+	ResponseEntity<FoodItem> updateFoodItem(@PathVariable int id, @RequestBody FoodItemDto foodItemDto){
+		
+		FoodItemDto updatedFoodItem = foodItemService.updateFoodItem(id, foodItemDto);
+		return new ResponseEntity(updatedFoodItem, HttpStatus.OK);
+	}
+	
+	
 }
