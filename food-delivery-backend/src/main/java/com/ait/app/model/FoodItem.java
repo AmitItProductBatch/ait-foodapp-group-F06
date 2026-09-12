@@ -21,9 +21,9 @@ public class FoodItem {
 	private Boolean availability;
 	private String category;
 
-	//
+	
 	@ManyToOne
-	@JoinColumn(name = "restaurant_id")
+	@JoinColumn(name = "restaurantId")
 	private Restaurant restaurant;
 
 	public int getId() {
@@ -74,9 +74,15 @@ public class FoodItem {
 		this.category = category;
 	}
 
-	public void setRestaurant(Restaurant restaurant2) {
-		// TODO Auto-generated method stub
-		
+	public Restaurant getRestaurant() {
+		return restaurant;
 	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+
+	
+	
 
 }

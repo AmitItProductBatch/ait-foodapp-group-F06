@@ -2,7 +2,7 @@ package com.ait.app.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class FoodItemException {
+public class FoodItemException extends RuntimeException {
 
 	private String errorMessage;
 
