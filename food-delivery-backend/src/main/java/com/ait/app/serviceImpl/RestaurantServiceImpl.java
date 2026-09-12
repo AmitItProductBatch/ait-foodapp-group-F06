@@ -21,6 +21,7 @@ import com.ait.app.service.RestaurantService;
 public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	RestaurantRepository restaurantRepository;
+	
 	@Autowired
 	UserRepository userRepository;
 

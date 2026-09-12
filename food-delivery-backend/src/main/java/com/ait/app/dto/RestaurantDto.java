@@ -1,6 +1,9 @@
 package com.ait.app.dto;
 
 public class RestaurantDto {
+	
+	
+	
 	private String name;
 	private String address;
 	private long mobileNo;
