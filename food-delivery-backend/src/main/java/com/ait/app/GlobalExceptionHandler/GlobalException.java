@@ -57,6 +57,9 @@ public class GlobalException {
 		return new ResponseEntity<>(roleValidationException.getMessage(), roleValidationException.getStatus());
 
 	}
+    public ResponseEntity<String>handleFooditemException(FoodItemException foodItemException){
+    	return new ResponseEntity(foodItemException.getErrorMessage(),foodItemException.getHttpStatus());
+    }
     
     
    

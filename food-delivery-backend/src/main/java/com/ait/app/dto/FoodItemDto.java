@@ -1,7 +1,7 @@
 package com.ait.app.dto;
 
 public class FoodItemDto {
-	
+
 	private int restaurantId;
 
 	private String name;
@@ -9,6 +9,14 @@ public class FoodItemDto {
 	private Long price;
 	private Boolean availability;
 	private String category;
+
+	public int getRestaurantId() {
+		return restaurantId;
+	}
+
+	public void setRestaurantId(int restaurantId) {
+		this.restaurantId = restaurantId;
+	}
 
 	public String getName() {
 		return name;
@@ -48,16 +56,6 @@ public class FoodItemDto {
 
 	public void setCategory(String category) {
 		this.category = category;
-	}
-
-	
-
-	public int getRestaurantId() {
-		return restaurantId;
-	}
-
-	public void setRestaurantId(int restaurantId) {
-		this.restaurantId = restaurantId;
 	}
 
 }
