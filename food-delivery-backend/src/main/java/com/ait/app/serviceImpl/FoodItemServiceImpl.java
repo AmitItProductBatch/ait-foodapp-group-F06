@@ -87,4 +87,14 @@ public class FoodItemServiceImpl implements FoodItemService {
 
 		return foodItemResponse;
 	}
+
+	@Override
+	public void DeteleFoodItem(int id) {
+		if(!foodItemRepository.existsById(id)) {
+			throw new FoodItemException("food item not found with id:"+id, HttpStatus.NOT_FOUND);
+		}
+		
+		foodItemRepository.deleteById(id);
+		
+	}
 }
