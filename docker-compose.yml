@@ -30,7 +30,7 @@ services:
   # ============================================================================
   backend:
     build:
-      context: ./food-delivery-backend/food-delivery-backend
+      context: ./food-delivery-backend
       dockerfile: Dockerfile
     container_name: fooddelivery-backend-06
     restart: unless-stopped
