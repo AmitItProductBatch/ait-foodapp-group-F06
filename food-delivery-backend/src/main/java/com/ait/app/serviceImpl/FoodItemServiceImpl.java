@@ -11,8 +11,10 @@ import com.ait.app.dto.FoodItemDto;
 import com.ait.app.dto.FoodItemPriceDto;
 import com.ait.app.exception.FoodItemException;
 import com.ait.app.exception.UpdateCustomerProfileException;
+import com.ait.app.model.Cart;
 import com.ait.app.model.FoodItem;
 import com.ait.app.model.Restaurant;
+import com.ait.app.repository.CartRepository;
 import com.ait.app.repository.FoodItemRepository;
 import com.ait.app.repository.RestaurantRepository;
 import com.ait.app.service.FoodItemService;
@@ -25,6 +27,7 @@ public class FoodItemServiceImpl implements FoodItemService {
 
 	@Autowired
 	private RestaurantRepository restaurantRepository;
+	
 
 	@Override
 	public FoodItemDto addFoodItem(FoodItemDto dto) {
@@ -33,6 +36,8 @@ public class FoodItemServiceImpl implements FoodItemService {
 		if (restaurant == null) {
 			throw new FoodItemException("Restaurant not found", HttpStatus.NOT_FOUND);
 		}
+		
+		
 
 		FoodItem foodItem = new FoodItem();
 
@@ -41,6 +46,7 @@ public class FoodItemServiceImpl implements FoodItemService {
 		foodItem.setPrice(dto.getPrice());
 		foodItem.setAvailability(dto.getAvailability());
 		foodItem.setCategory(dto.getCategory());
+		
 
 		foodItem.setRestaurant(restaurant);
 
@@ -102,13 +108,13 @@ public class FoodItemServiceImpl implements FoodItemService {
 	@Override
 	public FoodItemPriceDto getFoodItemPrice(int foodItemId) {
 
-	    FoodItem foodItem = foodItemRepository.findById(foodItemId).get();
+		FoodItem foodItem = foodItemRepository.findById(foodItemId).get();
 
-	    FoodItemPriceDto response = new FoodItemPriceDto();
+		FoodItemPriceDto response = new FoodItemPriceDto();
 
-	  response.setFoodItemId(foodItem.getId());
-	  response.setFoodName(foodItem.getName());
-	  response.setPrice(foodItem.getPrice());
-	  return response;
+		response.setFoodItemId(foodItem.getId());
+		response.setFoodName(foodItem.getName());
+		response.setPrice(foodItem.getPrice());
+		return response;
 	}
-	}
+}
