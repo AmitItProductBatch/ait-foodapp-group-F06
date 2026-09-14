@@ -10,6 +10,7 @@ public class FoodItemDto {
 	private Boolean availability;
 	private String category;
 
+
 	public int getRestaurantId() {
 		return restaurantId;
 	}
