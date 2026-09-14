@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.ait.app.dto.FoodItemDto;
+import com.ait.app.dto.FoodItemPriceDto;
 import com.ait.app.exception.FoodItemException;
 import com.ait.app.exception.UpdateCustomerProfileException;
 import com.ait.app.model.FoodItem;
@@ -90,11 +91,24 @@ public class FoodItemServiceImpl implements FoodItemService {
 
 	@Override
 	public void DeteleFoodItem(int id) {
-		if(!foodItemRepository.existsById(id)) {
-			throw new FoodItemException("food item not found with id:"+id, HttpStatus.NOT_FOUND);
+		if (!foodItemRepository.existsById(id)) {
+			throw new FoodItemException("food item not found with id:" + id, HttpStatus.NOT_FOUND);
 		}
-		
+
 		foodItemRepository.deleteById(id);
-		
+
 	}
-}
+
+	@Override
+	public FoodItemPriceDto getFoodItemPrice(int foodItemId) {
+
+	    FoodItem foodItem = foodItemRepository.findById(foodItemId).get();
+
+	    FoodItemPriceDto response = new FoodItemPriceDto();
+
+	  response.setFoodItemId(foodItem.getId());
+	  response.setFoodName(foodItem.getName());
+	  response.setPrice(foodItem.getPrice());
+	  return response;
+	}
+	}
