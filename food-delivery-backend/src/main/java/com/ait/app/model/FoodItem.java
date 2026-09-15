@@ -21,7 +21,7 @@ public class FoodItem {
 
 	private String name;
 	private String description;
-	private Long price;
+	private int price;
 	private Boolean availability;
 	private String category;
 
@@ -48,11 +48,11 @@ public class FoodItem {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Long getPrice() {
+	public int getPrice() {
 		return price;
 	}
-	public void setPrice(Long price) {
-		this.price = price;
+	public void setPrice(int long1) {
+		this.price = long1;
 	}
 	public Boolean getAvailability() {
 		return availability;
