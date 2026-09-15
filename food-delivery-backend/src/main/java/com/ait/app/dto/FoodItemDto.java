@@ -6,7 +6,7 @@ public class FoodItemDto {
 
 	private String name;
 	private String description;
-	private Long price;
+	private int price;
 	private Boolean availability;
 	private String category;
 
@@ -35,12 +35,12 @@ public class FoodItemDto {
 		this.description = description;
 	}
 
-	public Long getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
-		this.price = price;
+	public void setPrice(int i) {
+		this.price = i;
 	}
 
 	public Boolean getAvailability() {
