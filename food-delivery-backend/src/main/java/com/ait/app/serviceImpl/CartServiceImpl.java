@@ -15,9 +15,11 @@ import com.ait.app.exception.FoodItemNotFoundException;
 import com.ait.app.exception.UserNotFoundException;
 import com.ait.app.model.Cart;
 import com.ait.app.model.FoodItem;
+import com.ait.app.model.Restaurant;
 import com.ait.app.model.User;
 import com.ait.app.repository.CartRepository;
 import com.ait.app.repository.FoodItemRepository;
+import com.ait.app.repository.RestaurantRepository;
 import com.ait.app.repository.UserRepository;
 import com.ait.app.service.CartService;
 
@@ -29,6 +31,8 @@ public class CartServiceImpl implements CartService {
 	UserRepository userRepository;
 	@Autowired
 	CartRepository cartRepository;
+	@Autowired
+	RestaurantRepository restaurantRepository;
 
 	@Override
 	public CartDto createCart(CartDto cartDto) {
@@ -45,11 +49,13 @@ public class CartServiceImpl implements CartService {
 			throw new UserNotFoundException("user not found with id " + cartDto.getUserId(), HttpStatus.NOT_FOUND);
 		}
 		User user = optional.get();
+		Restaurant restaurant=restaurantRepository.findById(cartDto.getRestaurantId()).get();
 		cart.setFoodItem(foodItem);
 		cart.setFoodName(cartDto.getFoodName());
 		cart.setPrice(cartDto.getPrice());
 		cart.setQuantity(cartDto.getQuantity());
 		cart.setUser(user);
+		cart.setRestaurant(restaurant);
 
 		Cart savedCart = cartRepository.save(cart);
 
@@ -59,6 +65,7 @@ public class CartServiceImpl implements CartService {
 		dto.setPrice(savedCart.getPrice());
 		dto.setQuantity(savedCart.getQuantity());
 		dto.setUserId(savedCart.getUser().getId());
+		dto.setRestaurantId(savedCart.getRestaurant().getId());
 		return dto;
 
 	}

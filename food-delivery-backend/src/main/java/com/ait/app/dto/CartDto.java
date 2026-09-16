@@ -6,8 +6,16 @@ private int foodItemId;
 private int quantity;
 private int price;
 private String foodName;
+private int restaurantId;
 
 
+
+public int getRestaurantId() {
+	return restaurantId;
+}
+public void setRestaurantId(int restaurantId) {
+	this.restaurantId = restaurantId;
+}
 public int getUserId() {
 	return userId;
 }
