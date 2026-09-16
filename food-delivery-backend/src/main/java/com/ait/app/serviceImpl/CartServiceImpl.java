@@ -1,5 +1,7 @@
 package com.ait.app.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.ait.app.dto.CartDto;
+import com.ait.app.dto.CartItemResponseDto;
+import com.ait.app.dto.CartResponseDto;
 import com.ait.app.exception.FoodItemNotFoundException;
 import com.ait.app.exception.UserNotFoundException;
 import com.ait.app.model.Cart;
@@ -46,6 +50,7 @@ public class CartServiceImpl implements CartService {
 		cart.setPrice(cartDto.getPrice());
 		cart.setQuantity(cartDto.getQuantity());
 		cart.setUser(user);
+
 		Cart savedCart = cartRepository.save(cart);
 
 		CartDto dto = new CartDto();
@@ -55,6 +60,42 @@ public class CartServiceImpl implements CartService {
 		dto.setQuantity(savedCart.getQuantity());
 		dto.setUserId(savedCart.getUser().getId());
 		return dto;
+
+	}
+
+	@Override
+	public CartResponseDto getCart(int userId) {
+		List<Cart> cartList = cartRepository.findByUserId(userId);
+		
+
+		CartResponseDto cartResponseDto = new CartResponseDto();
+		List<CartItemResponseDto> itemList = new ArrayList();
+		int totalAmount = 0;
+
+		for (Cart c : cartList) {
+
+			CartItemResponseDto cartItemResponseDto = new CartItemResponseDto();
+			cartItemResponseDto.setCartItemId(c.getId());
+			cartItemResponseDto.setFoodItemId(c.getFoodItem().getId());
+			cartItemResponseDto.setFoodName(c.getFoodName());
+			cartItemResponseDto.setPrice(c.getPrice());
+			cartItemResponseDto.setQuantity(c.getQuantity());
+
+			int total = c.getPrice() * c.getQuantity();
+			cartItemResponseDto.setTotal(total);
+
+			itemList.add(cartItemResponseDto);
+			totalAmount = totalAmount + total;
+			cartResponseDto.setCartId(c.getId());
+			if (c.getRestaurant() != null) {
+
+				cartResponseDto.setRestaurantId(c.getRestaurant().getId());
+			}
+			cartResponseDto.setItems(itemList);
+			cartResponseDto.setTotalAmount(totalAmount);
+
+		}
+		return cartResponseDto;
 
 	}
 

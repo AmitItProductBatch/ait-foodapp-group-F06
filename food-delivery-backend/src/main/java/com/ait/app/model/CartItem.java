@@ -16,10 +16,17 @@ public class CartItem {
 	private int quantity;
 	private int price;
 	private int total;
-
 	@ManyToOne
 	@JoinColumn(name = "cartId")
 	private Cart cart;
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "foodItemId")
@@ -55,14 +62,6 @@ public class CartItem {
 
 	public void setTotal(int total) {
 		this.total = total;
-	}
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
 	}
 
 	public FoodItem getFooditem() {

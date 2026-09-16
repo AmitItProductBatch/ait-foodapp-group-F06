@@ -1,11 +1,14 @@
 package com.ait.app.GlobalExceptionHandler;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.ait.app.exception.CartItemServiceException;
+import com.ait.app.exception.CartNotFoundException;
 import com.ait.app.exception.CustomerAddressException;
 import com.ait.app.exception.CustomerException;
 
@@ -84,4 +87,15 @@ public class GlobalException {
 	ResponseEntity<String>CartItemServiceException(CartItemServiceException cartItemServiceException){
 		return new ResponseEntity(cartItemServiceException.getMessage(),cartItemServiceException.getHttpStatus());
 	}
+	
+	
+	  @ExceptionHandler(CartNotFoundException.class)
+	    public ResponseEntity<String> handleCartNotFound(CartNotFoundException cartNotFoundException) {
+
+	        return new ResponseEntity(cartNotFoundException.getMessage(),cartNotFoundException.getStatus()
+	        );
+	    
+	}
+	
+
 }
