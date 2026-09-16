@@ -6,6 +6,8 @@ private int foodItemId;
 private int quantity;
 private int price;
 private String foodName;
+
+
 public int getUserId() {
 	return userId;
 }

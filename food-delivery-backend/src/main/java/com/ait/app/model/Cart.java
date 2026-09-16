@@ -1,5 +1,8 @@
 package com.ait.app.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,13 +26,11 @@ public class Cart {
 	private int quantity;
 	private int price;
 	private String foodName;
-	
-	public String getFoodName() {
-		return foodName;
-	}
-	public void setFoodName(String foodName) {
-		this.foodName = foodName;
-	}
+	@OneToMany(mappedBy = "cart",cascade=CascadeType.ALL)
+	private List<CartItem> cartItem;
+	@OneToOne
+	@JoinColumn(name="restaurantId")
+	private Restaurant restaurant;
 	public int getId() {
 		return id;
 	}
@@ -60,8 +61,24 @@ public class Cart {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	
-	
+	public String getFoodName() {
+		return foodName;
+	}
+	public void setFoodName(String foodName) {
+		this.foodName = foodName;
+	}
+	public List<CartItem> getCartItem() {
+		return cartItem;
+	}
+	public void setCartItem(List<CartItem> cartItem) {
+		this.cartItem = cartItem;
+	}
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
 	
 	
 	
