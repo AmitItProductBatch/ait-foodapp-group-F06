@@ -136,4 +136,14 @@ public class CartItemServiceimpl implements CartItemService {
 
 		return cartResponseDto;
 	}
+
+	@Override
+	public void deleteCartItem(int id) {
+		if (!cartItemRepository.existsById(id)) {
+			throw new CartItemServiceException("Cart item not found with id:" + id, HttpStatus.NOT_FOUND);
+		}
+
+		cartItemRepository.deleteById(id);
+
+	}
 }

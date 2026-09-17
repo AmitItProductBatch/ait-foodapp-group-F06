@@ -8,4 +8,6 @@ public interface CartItemService {
 	CartItemDto saveCartItem(CartItemDto cartitemdto);
 
 	CartResponseDto updateCartItemQuantity(int userId, int cartItemId, int quantity);
+	
+	void deleteCartItem(int id);
 }
