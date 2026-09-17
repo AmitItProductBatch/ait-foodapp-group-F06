@@ -7,6 +7,14 @@ public class CartItemResponseDto {
     private int price;
     private int quantity;
     private int total;
+    private int cartId;
+    
+	public int getCartId() {
+		return cartId;
+	}
+	public void setCartId(int cartId) {
+		this.cartId = cartId;
+	}
 	public int getCartItemId() {
 		return cartItemId;
 	}
