@@ -14,9 +14,11 @@ import com.ait.app.dto.CartResponseDto;
 import com.ait.app.exception.FoodItemNotFoundException;
 import com.ait.app.exception.UserNotFoundException;
 import com.ait.app.model.Cart;
+import com.ait.app.model.CartItem;
 import com.ait.app.model.FoodItem;
 import com.ait.app.model.Restaurant;
 import com.ait.app.model.User;
+import com.ait.app.repository.CartItemRepository;
 import com.ait.app.repository.CartRepository;
 import com.ait.app.repository.FoodItemRepository;
 import com.ait.app.repository.RestaurantRepository;
@@ -33,6 +35,8 @@ public class CartServiceImpl implements CartService {
 	CartRepository cartRepository;
 	@Autowired
 	RestaurantRepository restaurantRepository;
+	@Autowired
+	CartItemRepository cartItemRepository;
 
 	@Override
 	public CartDto createCart(CartDto cartDto) {
@@ -104,4 +108,24 @@ public class CartServiceImpl implements CartService {
 
 	}
 
+	@Override
+	public void deleteCart(int userId) {
+
+		List<Cart> cartList = cartRepository.findByUserId(userId);
+
+		for (Cart cart : cartList) {
+
+			List<CartItem> items = cart.getCartItem();
+
+			if (items != null) {
+				cartItemRepository.deleteAll(items);
+			}
+
+			cart.setRestaurant(null);
+			cartRepository.save(cart);
+		}
+
+	}
 }
+
+
