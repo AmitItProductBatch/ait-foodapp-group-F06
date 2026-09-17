@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ait.app.dto.CartDto;
 import com.ait.app.dto.CartItemResponseDto;
 import com.ait.app.dto.CartResponseDto;
+import com.ait.app.exception.CartItemNotFoundException;
 import com.ait.app.exception.FoodItemNotFoundException;
 import com.ait.app.exception.UserNotFoundException;
 import com.ait.app.model.Cart;
@@ -24,6 +25,8 @@ import com.ait.app.repository.FoodItemRepository;
 import com.ait.app.repository.RestaurantRepository;
 import com.ait.app.repository.UserRepository;
 import com.ait.app.service.CartService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -109,23 +112,26 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteCart(int userId) {
 
 		List<Cart> cartList = cartRepository.findByUserId(userId);
+		if (cartList.isEmpty()) {
+			throw new CartItemNotFoundException("cart not found for user id" + userId, HttpStatus.NOT_FOUND);
+		}
 
 		for (Cart cart : cartList) {
 
 			List<CartItem> items = cart.getCartItem();
 
-			if (items != null) {
+			if (items != null && !items.isEmpty()) {
 				cartItemRepository.deleteAll(items);
 			}
 
 			cart.setRestaurant(null);
+			cart.setPrice(0);
 			cartRepository.save(cart);
 		}
 
 	}
 }
-
-
