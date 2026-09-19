@@ -2,7 +2,6 @@ package com.ait.app.serviceImpl;
 
 import java.util.Optional;
 
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,15 +31,18 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 		Optional<Restaurant> o = restaurantRepository.findById(requestDto.getRestaurantId());
 		
 		if(o.isEmpty()) {
-			throw new RestaurantException("Restaurant Not Found", HttpStatus.NOT_FOUND);
+			throw new RestaurantException("Restaurant Not Found",
+					HttpStatus.NOT_FOUND);
 			
 		}
 		Restaurant restaurant = o.get();
 				
 
-		if (foodCategoryRepository.existsByNameAndRestaurantId(requestDto.getName(), requestDto.getRestaurantId())) {
+		if (foodCategoryRepository.existsByNameAndRestaurantId(requestDto.getName(),
+				requestDto.getRestaurantId())) {
 
-			throw new FoodCategoryException("Category already exists", HttpStatus.BAD_REQUEST);
+			throw new FoodCategoryException("Category already exists",
+					HttpStatus.BAD_REQUEST);
 		}
 
 		FoodCategory category = new FoodCategory();
@@ -57,6 +59,33 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 		response.setRestaurantId(restaurant.getId());
 
 		return response;
+	}
+
+	@Override
+	public FoodCategoryResponseDto getCategory(int categoryId) {
+		
+		
+		Optional<FoodCategory> optionalCategory =
+				foodCategoryRepository.findById(categoryId);
+		
+		
+		if(optionalCategory.isEmpty()) {
+			throw new FoodCategoryException (
+				"Food Category not found",
+				HttpStatus.NOT_FOUND
+				
+			);
+		}
+				
+		FoodCategory foodCategory = optionalCategory.get();
+		
+		FoodCategoryResponseDto categoryResponseDto = new FoodCategoryResponseDto();
+		
+		categoryResponseDto.setId(foodCategory.getId());
+		categoryResponseDto.setName(foodCategory.getName());
+		categoryResponseDto.setRestaurantId(foodCategory.getRestaurant().getId());
+		
+		return categoryResponseDto;
 	}
 
 }

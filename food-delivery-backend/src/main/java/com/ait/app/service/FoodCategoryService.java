@@ -6,4 +6,6 @@ import com.ait.app.dto.FoodCategoryResponseDto;
 public interface FoodCategoryService {
 	
 	FoodCategoryResponseDto addCategory(FoodCategoryRequestDto requestDto);
+	
+	FoodCategoryResponseDto getCategory(int categoryId );
 }
