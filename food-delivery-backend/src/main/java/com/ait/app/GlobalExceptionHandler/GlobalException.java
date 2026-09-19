@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.ait.app.exception.CartItemNotFoundException;
 import com.ait.app.exception.CartItemServiceException;
 import com.ait.app.exception.CartNotFoundException;
 import com.ait.app.exception.CustomerAddressException;
@@ -17,7 +16,6 @@ import com.ait.app.exception.CustomerProfileException;
 import com.ait.app.exception.DuplicateRoleException;
 import com.ait.app.exception.FoodItemException;
 import com.ait.app.exception.FoodItemNotFoundException;
-import com.ait.app.exception.InvalidQuantityException;
 import com.ait.app.exception.RestaurantException;
 import com.ait.app.exception.RoleValidationException;
 import com.ait.app.exception.UpdateCustomerProfileException;
@@ -86,30 +84,18 @@ public class GlobalException {
 	}
 
 	@ExceptionHandler(CartItemServiceException.class)
-	ResponseEntity<String> CartItemServiceException(CartItemServiceException cartItemServiceException) {
-		return new ResponseEntity(cartItemServiceException.getMessage(), cartItemServiceException.getHttpStatus());
+	ResponseEntity<String>CartItemServiceException(CartItemServiceException cartItemServiceException){
+		return new ResponseEntity(cartItemServiceException.getMessage(),cartItemServiceException.getHttpStatus());
 	}
+	
+	
+	  @ExceptionHandler(CartNotFoundException.class)
+	    public ResponseEntity<String> handleCartNotFound(CartNotFoundException cartNotFoundException) {
 
-	@ExceptionHandler(CartNotFoundException.class)
-	public ResponseEntity<String> handleCartNotFound(CartNotFoundException cartNotFoundException) {
-
-		return new ResponseEntity(cartNotFoundException.getMessage(), cartNotFoundException.getStatus());
-
+	        return new ResponseEntity(cartNotFoundException.getMessage(),cartNotFoundException.getStatus()
+	        );
+	    
 	}
-
-	@ExceptionHandler(CartItemNotFoundException.class)
-	public ResponseEntity<String> handleCartItemNotFoundException(CartItemNotFoundException cartItemNotFoundException) {
-
-		return new ResponseEntity(cartItemNotFoundException.getErrorMessage(),
-				cartItemNotFoundException.getHttpStatus());
-
-	}
-
-	@ExceptionHandler(InvalidQuantityException.class)
-	public ResponseEntity<String> handleInvalidQuantityException(InvalidQuantityException invalidQuantityException) {
-
-		return new ResponseEntity(invalidQuantityException.getErrorMessage(), invalidQuantityException.getHttpStatus());
-
-	}
+	
 
 }
