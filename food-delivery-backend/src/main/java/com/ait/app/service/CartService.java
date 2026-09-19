@@ -7,6 +7,4 @@ public interface CartService {
 	CartDto createCart(CartDto cartDto);
 
 	CartResponseDto getCart(int userId);
-	
-	void deleteCart(int userId);
 }
