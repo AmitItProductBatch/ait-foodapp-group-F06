@@ -15,6 +15,7 @@ import com.ait.app.exception.CustomerException;
 
 import com.ait.app.exception.CustomerProfileException;
 import com.ait.app.exception.DuplicateRoleException;
+import com.ait.app.exception.FoodCategoryException;
 import com.ait.app.exception.FoodItemException;
 import com.ait.app.exception.FoodItemNotFoundException;
 import com.ait.app.exception.InvalidQuantityException;
@@ -111,5 +112,12 @@ public class GlobalException {
 		return new ResponseEntity(invalidQuantityException.getErrorMessage(), invalidQuantityException.getHttpStatus());
 
 	}
+	
+	 @ExceptionHandler(FoodCategoryException.class)
+	    public ResponseEntity<String> handleFoodCategoryException(FoodCategoryException e) {
 
-}
+	        return new ResponseEntity(e.getMessage(), e.getStatus());
+	
+	 }
+
+	 }
