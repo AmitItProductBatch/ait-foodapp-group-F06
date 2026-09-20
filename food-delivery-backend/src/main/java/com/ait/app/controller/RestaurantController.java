@@ -39,4 +39,11 @@ public class RestaurantController {
 		return new ResponseEntity<Restaurant>(restaurant, HttpStatus.OK);
 	}
 
+	@GetMapping("getAllRestaurants/{foodCategoryId}")
+	ResponseEntity getAllRestaurants(@PathVariable int foodCategoryId) {
+
+		List<RestaurantDto> l = restaurantService.getAllRestaurants(foodCategoryId);
+		return new ResponseEntity(l, HttpStatus.OK);
+	}
+
 }

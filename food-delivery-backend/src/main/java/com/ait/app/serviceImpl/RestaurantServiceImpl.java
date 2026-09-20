@@ -1,5 +1,6 @@
 package com.ait.app.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ import com.ait.app.service.RestaurantService;
 public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	RestaurantRepository restaurantRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
 
@@ -64,6 +65,26 @@ public class RestaurantServiceImpl implements RestaurantService {
 				() -> new RestaurantException("Restaurant not found with id :" + id, HttpStatus.NOT_FOUND));
 
 		return restaurant;
+	}
+
+	@Override
+	public List<RestaurantDto> getAllRestaurants(int foodCategoryId) {
+		List<Restaurant> l = restaurantRepository.findAllRestaurantsByCategoryId(foodCategoryId);
+
+		List<RestaurantDto> responseList = new ArrayList();
+		for (Restaurant restaurant : l) {
+
+			RestaurantDto restaurantDto = new RestaurantDto();
+			restaurantDto.setAddress(restaurant.getAddress());
+			restaurantDto.setCuisine(restaurant.getCuisine());
+			restaurantDto.setMobileNo(restaurant.getMobileNo());
+			restaurantDto.setName(restaurant.getName());
+			restaurantDto.setRating(restaurant.getRating());
+			restaurantDto.setUserId(restaurant.getUser().getId());
+			responseList.add(restaurantDto);
+		}
+
+		return responseList;
 	}
 
 }
