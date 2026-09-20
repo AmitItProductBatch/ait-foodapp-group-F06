@@ -1,5 +1,7 @@
 package com.ait.app.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +91,7 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 		}
 
 		FoodCategory foodCategory = o.get();
-		
+
 		Optional<Restaurant> optional = restaurantRepository.findById(requestDto.getRestaurantId());
 		if (optional.isEmpty()) {
 			throw new RestaurantException("restaurant not found ", HttpStatus.NOT_FOUND);
@@ -106,6 +108,26 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 		foodCategoryResponseDto.setRestaurantId(category.getRestaurant().getId());
 		return foodCategoryResponseDto;
 
+	}
+
+	@Override
+	public List<FoodCategoryResponseDto> getFoodCategories(int restaurantId) {
+		Optional<Restaurant> o = restaurantRepository.findById(restaurantId);
+		if (o.isEmpty()) {
+			throw new RestaurantException("restaurant not found ", HttpStatus.NOT_FOUND);
+		}
+
+		List<FoodCategory> l = foodCategoryRepository.findAllCategoriesByRestaurantId(restaurantId);
+
+		List<FoodCategoryResponseDto> responseList = new ArrayList();
+		for (FoodCategory foodCategory : l) {
+			FoodCategoryResponseDto foodCategoryResponseDto = new FoodCategoryResponseDto();
+			foodCategoryResponseDto.setId(foodCategory.getId());
+			foodCategoryResponseDto.setName(foodCategory.getName());
+			foodCategoryResponseDto.setRestaurantId(restaurantId);
+			responseList.add(foodCategoryResponseDto);
+		}
+		return responseList;
 	}
 
 }
