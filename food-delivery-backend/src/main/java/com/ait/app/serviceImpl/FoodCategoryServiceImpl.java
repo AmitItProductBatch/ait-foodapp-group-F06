@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ait.app.dto.FoodCategoryRequestDto;
 import com.ait.app.dto.FoodCategoryResponseDto;
+import com.ait.app.dto.RestaurantDto;
 import com.ait.app.exception.FoodCategoryException;
 import com.ait.app.exception.RestaurantException;
 import com.ait.app.model.FoodCategory;
@@ -129,5 +130,6 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 		}
 		return responseList;
 	}
+
 
 }
