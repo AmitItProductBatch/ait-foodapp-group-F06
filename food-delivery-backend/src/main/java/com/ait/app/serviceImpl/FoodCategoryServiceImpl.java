@@ -20,7 +20,7 @@ import com.ait.app.service.FoodCategoryService;
 public class FoodCategoryServiceImpl implements FoodCategoryService {
 
 	@Autowired
-	private FoodCategoryRepository foodCategoryRepository;
+	FoodCategoryRepository foodCategoryRepository;
 
 	@Autowired
 	RestaurantRepository restaurantRepository;
@@ -29,20 +29,16 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 	public FoodCategoryResponseDto addCategory(FoodCategoryRequestDto requestDto) {
 
 		Optional<Restaurant> o = restaurantRepository.findById(requestDto.getRestaurantId());
-		
-		if(o.isEmpty()) {
-			throw new RestaurantException("Restaurant Not Found",
-					HttpStatus.NOT_FOUND);
-			
+
+		if (o.isEmpty()) {
+			throw new RestaurantException("Restaurant Not Found", HttpStatus.NOT_FOUND);
+
 		}
 		Restaurant restaurant = o.get();
-				
 
-		if (foodCategoryRepository.existsByNameAndRestaurantId(requestDto.getName(),
-				requestDto.getRestaurantId())) {
+		if (foodCategoryRepository.existsByNameAndRestaurantId(requestDto.getName(), requestDto.getRestaurantId())) {
 
-			throw new FoodCategoryException("Category already exists",
-					HttpStatus.BAD_REQUEST);
+			throw new FoodCategoryException("Category already exists", HttpStatus.BAD_REQUEST);
 		}
 
 		FoodCategory category = new FoodCategory();
@@ -63,29 +59,53 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 
 	@Override
 	public FoodCategoryResponseDto getCategory(int categoryId) {
-		
-		
-		Optional<FoodCategory> optionalCategory =
-				foodCategoryRepository.findById(categoryId);
-		
-		
-		if(optionalCategory.isEmpty()) {
-			throw new FoodCategoryException (
-				"Food Category not found",
-				HttpStatus.NOT_FOUND
-				
+
+		Optional<FoodCategory> optionalCategory = foodCategoryRepository.findById(categoryId);
+
+		if (optionalCategory.isEmpty()) {
+			throw new FoodCategoryException("Food Category not found", HttpStatus.NOT_FOUND
+
 			);
 		}
-				
+
 		FoodCategory foodCategory = optionalCategory.get();
-		
+
 		FoodCategoryResponseDto categoryResponseDto = new FoodCategoryResponseDto();
-		
+
 		categoryResponseDto.setId(foodCategory.getId());
 		categoryResponseDto.setName(foodCategory.getName());
 		categoryResponseDto.setRestaurantId(foodCategory.getRestaurant().getId());
-		
+
 		return categoryResponseDto;
+	}
+
+	@Override
+	public FoodCategoryResponseDto updateCategory(int categoryId, FoodCategoryRequestDto requestDto) {
+
+		Optional<FoodCategory> o = foodCategoryRepository.findById(categoryId);
+		if (o.isEmpty()) {
+
+			throw new FoodCategoryException("food category not found", HttpStatus.NOT_FOUND);
+		}
+
+		FoodCategory foodCategory = o.get();
+		
+		Optional<Restaurant> optional = restaurantRepository.findById(requestDto.getRestaurantId());
+		if (optional.isEmpty()) {
+			throw new RestaurantException("restaurant not found ", HttpStatus.NOT_FOUND);
+		}
+		Restaurant restaurant = optional.get();
+		foodCategory.setName(requestDto.getName());
+		foodCategory.setRestaurant(restaurant);
+
+		FoodCategory category = foodCategoryRepository.save(foodCategory);
+
+		FoodCategoryResponseDto foodCategoryResponseDto = new FoodCategoryResponseDto();
+		foodCategoryResponseDto.setId(category.getId());
+		foodCategoryResponseDto.setName(category.getName());
+		foodCategoryResponseDto.setRestaurantId(category.getRestaurant().getId());
+		return foodCategoryResponseDto;
+
 	}
 
 }

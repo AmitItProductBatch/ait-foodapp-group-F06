@@ -7,5 +7,10 @@ import com.ait.app.model.FoodCategory;
 public interface FoodCategoryRepository extends JpaRepository<FoodCategory, Integer>{
 	
 	boolean existsByNameAndRestaurantId(String name, int restaurantId);
+	
+	boolean existsByNameAndRestaurantIdAndIdNot(
+			String name,
+			int restaurantId,
+			int id);
 
 }
