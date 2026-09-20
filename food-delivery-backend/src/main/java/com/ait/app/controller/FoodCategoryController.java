@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ait.app.dto.FoodCategoryRequestDto;
 import com.ait.app.dto.FoodCategoryResponseDto;
+import com.ait.app.dto.RestaurantDto;
 import com.ait.app.model.FoodCategory;
 import com.ait.app.service.FoodCategoryService;
 
@@ -58,6 +59,14 @@ public class FoodCategoryController {
 
 		return new ResponseEntity(list, HttpStatus.OK);
 
+	}
+
+	@GetMapping("/restaurants/{categoryName}")
+	public ResponseEntity<List<RestaurantDto>> getRestaurantByCategory(@PathVariable String categoryName) {
+
+		List<RestaurantDto> restaurants = foodCategoryService.getRestaurantByCategory(categoryName);
+
+		return new ResponseEntity<>(restaurants, HttpStatus.OK);
 	}
 
 }

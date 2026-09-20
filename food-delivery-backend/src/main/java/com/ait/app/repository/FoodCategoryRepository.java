@@ -13,4 +13,7 @@ public interface FoodCategoryRepository extends JpaRepository<FoodCategory, Inte
 	boolean existsByNameAndRestaurantIdAndIdNot(String name, int restaurantId, int id);
 
 	List<FoodCategory> findAllCategoriesByRestaurantId(int restaurantId);
+	
+	List<FoodCategory> findByName(String name);
+
 }

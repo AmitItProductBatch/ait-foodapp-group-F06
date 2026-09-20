@@ -1,6 +1,7 @@
 package com.ait.app.serviceImpl;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import com.ait.app.model.Restaurant;
 import com.ait.app.repository.FoodCategoryRepository;
 import com.ait.app.repository.RestaurantRepository;
 import com.ait.app.service.FoodCategoryService;
+import com.ait.app.dto.RestaurantDto;
 
 @Service
 public class FoodCategoryServiceImpl implements FoodCategoryService {
@@ -128,6 +130,41 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 			responseList.add(foodCategoryResponseDto);
 		}
 		return responseList;
+	}
+
+	@Override
+	public List<RestaurantDto> getRestaurantByCategory(String categoryName) {
+
+		List<FoodCategory> categories = foodCategoryRepository.findByName(categoryName);
+
+		if (categories.isEmpty()) {
+
+			throw new FoodCategoryException("No restaurant found for category: " + categoryName, HttpStatus.NOT_FOUND);
+		}
+
+		List<RestaurantDto> restaurantList = new ArrayList<>();
+
+		for (FoodCategory foodCategory : categories) {
+
+			Restaurant restaurant = foodCategory.getRestaurant();
+
+			RestaurantDto restaurantDto = new RestaurantDto();
+
+			restaurantDto.setName(restaurant.getName());
+
+			restaurantDto.setAddress(restaurant.getAddress());
+
+			restaurantDto.setCuisine(restaurant.getCuisine());
+
+			restaurantDto.setMobileNo(restaurant.getMobileNo());
+			restaurantDto.setRating(restaurant.getRating());
+
+			restaurantDto.setUserId(restaurant.getUser().getId());
+
+			restaurantList.add(restaurantDto);
+		}
+
+		return restaurantList;
 	}
 
 }
