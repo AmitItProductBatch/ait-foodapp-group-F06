@@ -19,7 +19,7 @@ public class OrderTotalController {
 	@Autowired
 	private OrderTotalService orderTotalService;
 
-	@PostMapping("/ordertotal")
+	@PostMapping("/orderTotal")
 	public ResponseEntity<OrderTotalResponseDto> calculateOrderTotal(@RequestBody OrderTotalRequestDto request) {
 
 		OrderTotalResponseDto response = orderTotalService.calculateOrderTotal(request);

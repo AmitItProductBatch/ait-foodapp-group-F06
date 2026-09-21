@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ait.app.dto.RestaurantAddressRequestDto;
 import com.ait.app.dto.RestaurantAddressResponseDto;
+import com.ait.app.exception.RestaurantAddressNotFoundException;
 import com.ait.app.exception.RestaurantException;
 import com.ait.app.model.Restaurant;
 import com.ait.app.model.RestaurantAddress;
@@ -27,45 +28,56 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 	@Override
 	public RestaurantAddressResponseDto addRestaurantAddress(int restaurantId, RestaurantAddressRequestDto requestDto) {
 
-		Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
-				() -> new RestaurantException("Restaurant not found with id : " + restaurantId, HttpStatus.NOT_FOUND));
+		Optional<Restaurant> o = restaurantRepository.findById(requestDto.getRestaurantId());
+		if (o.isEmpty()) {
+			throw new RestaurantException("restaurant not found exception", HttpStatus.NOT_FOUND);
+
+		}
+		Restaurant restaurant = o.get();
 
 		RestaurantAddress address = new RestaurantAddress();
 
-		address.setRestaurantNo(requestDto.getRestaurantNo());
+		address.setContactNo(requestDto.getContactNo());
 		address.setStreet(requestDto.getStreet());
 		address.setCity(requestDto.getCity());
 		address.setState(requestDto.getState());
-		address.setPincode(requestDto.getPincode());
+		address.setPinCode(requestDto.getPincode());
 		address.setRestaurant(restaurant);
+		address.setBuildingName(requestDto.getBuildingName());
 
 		RestaurantAddress savedAddress = restaurantAddressRepository.save(address);
 
-		return convertToResponse(savedAddress);
+		RestaurantAddressResponseDto restaurantAddressResponseDto = new RestaurantAddressResponseDto();
+		restaurantAddressResponseDto.setCity(savedAddress.getCity());
+		restaurantAddressResponseDto.setPincode(savedAddress.getPinCode());
+		restaurantAddressResponseDto.setRestaurantId(savedAddress.getRestaurant().getId());
+		restaurantAddressResponseDto.setContactNo(savedAddress.getContactNo());
+		restaurantAddressResponseDto.setState(savedAddress.getState());
+		restaurantAddressResponseDto.setStreet(savedAddress.getStreet());
+		restaurantAddressResponseDto.setBuildingName(savedAddress.getBuildingName());
+
+		return restaurantAddressResponseDto;
+
 	}
 
 	@Override
 	public RestaurantAddressResponseDto getRestaurantAddress(int restaurantId) {
+		Optional<RestaurantAddress> o = restaurantAddressRepository.findById(restaurantId);
+		if (o.isEmpty()) {
+			throw new RestaurantAddressNotFoundException("restaurant address not found", HttpStatus.NOT_FOUND);
 
-		RestaurantAddress address = restaurantAddressRepository.findByRestaurantId(restaurantId)
-				.orElseThrow(() -> new RestaurantException("Address not found for restaurant id : " + restaurantId,
-						HttpStatus.NOT_FOUND));
+		}
+		RestaurantAddress restaurantAddress = o.get();
 
-		return convertToResponse(address);
-	}
+		RestaurantAddressResponseDto restaurantAddressResponseDto = new RestaurantAddressResponseDto();
+		restaurantAddressResponseDto.setBuildingName(restaurantAddress.getBuildingName());
+		restaurantAddressResponseDto.setCity(restaurantAddress.getCity());
+		restaurantAddressResponseDto.setContactNo(restaurantAddress.getContactNo());
+		restaurantAddressResponseDto.setPincode(restaurantAddress.getPinCode());
+		restaurantAddressResponseDto.setRestaurantId(restaurantAddress.getRestaurant().getId());
+		restaurantAddressResponseDto.setState(restaurantAddress.getState());
+		restaurantAddressResponseDto.setStreet(restaurantAddress.getStreet());
+		return restaurantAddressResponseDto;
 
-	private RestaurantAddressResponseDto convertToResponse(RestaurantAddress address) {
-
-		RestaurantAddressResponseDto response = new RestaurantAddressResponseDto();
-
-		response.setId(address.getId());
-		response.setRestaurantId(address.getRestaurant().getId());
-		response.setRestaurantNo(address.getRestaurantNo());
-		response.setStreet(address.getStreet());
-		response.setCity(address.getCity());
-		response.setState(address.getState());
-		response.setPincode(address.getPincode());
-
-		return response;
 	}
 }

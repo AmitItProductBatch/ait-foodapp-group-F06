@@ -22,7 +22,7 @@ public class RestaurantAddressController {
 
 		RestaurantAddressResponseDto response = restaurantAddressService.addRestaurantAddress(restaurantId, requestDto);
 
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		return new ResponseEntity(response, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/getRestaurantAddress/{restaurantId}")
@@ -30,6 +30,6 @@ public class RestaurantAddressController {
 
 		RestaurantAddressResponseDto response = restaurantAddressService.getRestaurantAddress(restaurantId);
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity(response, HttpStatus.OK);
 	}
 }

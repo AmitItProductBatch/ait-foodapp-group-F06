@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -14,15 +15,25 @@ public class RestaurantAddress {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	private String restaurantNo;
+	private long contactNo;
 	private String street;
 	private String city;
 	private String state;
-	private String pincode;
+	private int pinCode;
+	private String buildingName;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "restaurantId")
 	private Restaurant restaurant;
+	
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
 
 	public int getId() {
 		return id;
@@ -32,12 +43,12 @@ public class RestaurantAddress {
 		this.id = id;
 	}
 
-	public String getRestaurantNo() {
-		return restaurantNo;
+	public long getContactNo() {
+		return contactNo;
 	}
 
-	public void setRestaurantNo(String restaurantNo) {
-		this.restaurantNo = restaurantNo;
+	public void setContactNo(long contactNo) {
+		this.contactNo = contactNo;
 	}
 
 	public String getStreet() {
@@ -64,12 +75,12 @@ public class RestaurantAddress {
 		this.state = state;
 	}
 
-	public String getPincode() {
-		return pincode;
+	public int getPinCode() {
+		return pinCode;
 	}
 
-	public void setPincode(String pincode) {
-		this.pincode = pincode;
+	public void setPinCode(int pinCode) {
+		this.pinCode = pinCode;
 	}
 
 	public Restaurant getRestaurant() {
@@ -79,4 +90,8 @@ public class RestaurantAddress {
 	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
 	}
+
+	
+
+	
 }

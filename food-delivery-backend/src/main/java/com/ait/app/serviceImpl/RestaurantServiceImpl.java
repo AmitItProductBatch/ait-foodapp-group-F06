@@ -38,6 +38,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 		restaurant.setCuisine(restaurantDto.getCuisine());
 		restaurant.setMobileNo(restaurantDto.getMobileNo());
 		restaurant.setRating(restaurantDto.getRating());
+		
 		restaurant.setUser(user);
 
 		Restaurant savedRestaurant = restaurantRepository.save(restaurant);
