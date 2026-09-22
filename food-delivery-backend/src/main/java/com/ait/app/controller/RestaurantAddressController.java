@@ -1,5 +1,7 @@
 package com.ait.app.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +42,21 @@ public class RestaurantAddressController {
 		RestaurantAddressResponseDto restaurantAddressResponseDto = restaurantAddressService
 				.updateRestaurantAddress(restaurantId, restaurantAddressRequestDto);
 		return new ResponseEntity(restaurantAddressResponseDto, HttpStatus.OK);
+	}
+
+	@DeleteMapping("deleteRestaurantAddress/{restaurantId}")
+	ResponseEntity deleteRestaurantAddress(@PathVariable int restaurantId) {
+
+		restaurantAddressService.deleteRestaurantAddress(restaurantId);
+		return new ResponseEntity("restaurant deleted", HttpStatus.NO_CONTENT);
+
+	}
+	@GetMapping("getAllAddressOfRestaurant/{restaurantId}")
+	ResponseEntity getAddressOfRestaurant(@PathVariable int restaurantId) {
+		
+	List<RestaurantAddressResponseDto>list=	restaurantAddressService.getRestaurantAddresses(restaurantId);
+	
+	return new ResponseEntity(list,HttpStatus.OK);
+	
 	}
 }
