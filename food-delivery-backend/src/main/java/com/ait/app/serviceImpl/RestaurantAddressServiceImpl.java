@@ -1,5 +1,7 @@
 package com.ait.app.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,16 +104,59 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		restaurantAddress.setState(restaurantAddressRequestDto.getState());
 		restaurantAddress.setStreet(restaurantAddressRequestDto.getStreet());
 		RestaurantAddress address = restaurantAddressRepository.save(restaurantAddress);
-         RestaurantAddressResponseDto restaurantAddressResponseDto=new RestaurantAddressResponseDto();
-         
-         restaurantAddressResponseDto.setBuildingName(address.getBuildingName());
-         restaurantAddressResponseDto.setCity(address.getCity());
-         restaurantAddressResponseDto.setContactNo(address.getContactNo());
-         restaurantAddressResponseDto.setPincode(address.getPinCode());
-         restaurantAddressResponseDto.setRestaurantId(address.getRestaurant().getId());
-         restaurantAddressResponseDto.setState(address.getState());
-         restaurantAddressResponseDto.setStreet(address.getStreet());
-         
+		RestaurantAddressResponseDto restaurantAddressResponseDto = new RestaurantAddressResponseDto();
+
+		restaurantAddressResponseDto.setBuildingName(address.getBuildingName());
+		restaurantAddressResponseDto.setCity(address.getCity());
+		restaurantAddressResponseDto.setContactNo(address.getContactNo());
+		restaurantAddressResponseDto.setPincode(address.getPinCode());
+		restaurantAddressResponseDto.setRestaurantId(address.getRestaurant().getId());
+		restaurantAddressResponseDto.setState(address.getState());
+		restaurantAddressResponseDto.setStreet(address.getStreet());
+
 		return restaurantAddressResponseDto;
 	}
+
+	@Override
+	public void deleteRestaurantAddress(int restaurantId) {
+		Optional<Restaurant> o = restaurantRepository.findById(restaurantId);
+		if (o.isEmpty()) {
+			throw new RestaurantException("restaurant not found", HttpStatus.NOT_FOUND);
+		}
+		Restaurant restaurant = o.get();
+
+		List<RestaurantAddress> list = restaurantAddressRepository.findByRestaurantId(restaurantId);
+		
+
+		restaurantAddressRepository.deleteById(restaurantId);
+
+	}
+
+	@Override
+	public List<RestaurantAddressResponseDto> getRestaurantAddresses(int restaurantId) {
+		Optional<Restaurant> o = restaurantRepository.findById(restaurantId);
+		if (o.isEmpty()) {
+			throw new RestaurantException("restaurant not found", HttpStatus.NOT_FOUND);
+		}
+		Restaurant restaurant = o.get();
+		List<RestaurantAddress> addressList = restaurantAddressRepository.findByRestaurantId(restaurantId);
+		
+		
+		List<RestaurantAddressResponseDto> responseList = new ArrayList();
+		for (RestaurantAddress restaurantAddress : addressList) {
+
+			RestaurantAddressResponseDto restaurantAddressResponseDto = new RestaurantAddressResponseDto();
+			restaurantAddressResponseDto.setBuildingName(restaurantAddress.getBuildingName());
+			restaurantAddressResponseDto.setCity(restaurantAddress.getCity());
+			restaurantAddressResponseDto.setContactNo(restaurantAddress.getContactNo());
+			restaurantAddressResponseDto.setPincode(restaurantAddress.getPinCode());
+			restaurantAddressResponseDto.setRestaurantId(restaurantAddress.getRestaurant().getId());
+			restaurantAddressResponseDto.setState(restaurantAddress.getState());
+			restaurantAddressResponseDto.setStreet(restaurantAddress.getStreet());
+			responseList.add(restaurantAddressResponseDto);
+
+		}
+		return responseList;
+	}
+
 }
