@@ -29,14 +29,8 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Cart cart;
 	
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Address> addresses;
 
 	public int getId() {
 		return id;
@@ -78,4 +72,23 @@ public class User {
 		this.role = role;
 	}
 
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
+	}
+	
+	
+
+	
 }
