@@ -1,5 +1,8 @@
 package com.ait.app.serviceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -45,7 +48,6 @@ public class AddressServiceImpl implements AddressService {
 
 		AddressResponseDto response = new AddressResponseDto();
 
-		
 		response.setLabel(savedAddress.getLabel());
 		response.setStreet(savedAddress.getStreet());
 		response.setApartment(savedAddress.getApartment());
@@ -68,7 +70,6 @@ public class AddressServiceImpl implements AddressService {
 
 		AddressResponseDto response = new AddressResponseDto();
 
-		
 		response.setLabel(address.getLabel());
 		response.setStreet(address.getStreet());
 		response.setApartment(address.getApartment());
@@ -80,5 +81,27 @@ public class AddressServiceImpl implements AddressService {
 
 		return response;
 
+	}
+
+	@Override
+	public List<AddressResponseDto> getAddressesOfUser(int userId) {
+		List<Address> list = addressRepository.findAllAddressOfUser(userId);
+		List<AddressResponseDto> responseList = new ArrayList<>();
+
+		for (Address address : list) {
+			AddressResponseDto addressResponseDto = new AddressResponseDto();
+			addressResponseDto.setApartment(address.getApartment());
+			addressResponseDto.setCity(address.getCity());
+			addressResponseDto.setDeliveryInstructions(address.getDeliveryInstructions());
+			addressResponseDto.setLabel(address.getLabel());
+			addressResponseDto.setLandmark(address.getLandmark());
+			addressResponseDto.setPostalCode(address.getPostalCode());
+			addressResponseDto.setStreet(address.getStreet());
+			addressResponseDto.setUserId(address.getUser().getId());
+			responseList.add(addressResponseDto);
+
+		}
+
+		return responseList;
 	}
 }
