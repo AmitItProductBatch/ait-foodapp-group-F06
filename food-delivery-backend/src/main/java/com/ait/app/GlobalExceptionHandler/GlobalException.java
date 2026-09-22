@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.ait.app.exception.AddressNotFoundException;
+
 import com.ait.app.exception.CartItemNotFoundException;
 import com.ait.app.exception.CartItemServiceException;
 import com.ait.app.exception.CartNotFoundException;
@@ -125,6 +127,11 @@ public class GlobalException {
 
 	        return new ResponseEntity(restaurantAddressNotFoundException.getErrormessage(),restaurantAddressNotFoundException.getHttpStatus());
 	
+	 }
+	 
+	 @ExceptionHandler(AddressNotFoundException.class)
+	 public ResponseEntity<String> handleAddressNotFound(AddressNotFoundException ex) {
+	     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	 }
 
 	 }
