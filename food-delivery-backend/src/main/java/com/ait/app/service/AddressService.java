@@ -1,5 +1,7 @@
 package com.ait.app.service;
 
+import java.util.List;
+
 import com.ait.app.dto.AddressRequestDto;
 import com.ait.app.dto.AddressResponseDto;
 
@@ -9,4 +11,5 @@ public interface AddressService {
 
 	AddressResponseDto getAddress(int userId, int addressId);
 
+	List<AddressResponseDto> getAddressesOfUser(int userId);
 }

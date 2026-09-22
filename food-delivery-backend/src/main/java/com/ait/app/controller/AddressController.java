@@ -1,5 +1,7 @@
 package com.ait.app.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +38,12 @@ public class AddressController {
 		AddressResponseDto response = addressService.getAddress(userId, addressId);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("getAllAddresses/{userId}")
+	ResponseEntity getAddressesOfUser(@PathVariable int userId) {
+
+		List<AddressResponseDto> l = addressService.getAddressesOfUser(userId);
+		return new ResponseEntity(l, HttpStatus.OK);
 	}
 }
