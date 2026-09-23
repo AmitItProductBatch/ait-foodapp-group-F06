@@ -2,15 +2,20 @@ package com.ait.app.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.management.relation.RoleInfoNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.ait.app.dto.UserDto;
+import com.ait.app.exception.CustomerException;
+import com.ait.app.model.Address;
 import com.ait.app.model.Role;
 import com.ait.app.model.User;
+import com.ait.app.repository.AddressRepository;
 import com.ait.app.repository.RoleRepository;
 import com.ait.app.repository.UserRepository;
 import com.ait.app.service.UserService;
@@ -21,6 +26,7 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	@Autowired
 	RoleRepository roleRepository;
+	
 
 	@Override
 	public UserDto saveUser(UserDto userDto) {
