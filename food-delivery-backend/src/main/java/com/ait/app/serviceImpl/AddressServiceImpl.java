@@ -2,6 +2,7 @@ package com.ait.app.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ait.app.dto.AddressRequestDto;
 import com.ait.app.dto.AddressResponseDto;
 import com.ait.app.exception.AddressNotFoundException;
-
+import com.ait.app.exception.CustomerException;
 import com.ait.app.exception.UserNotFoundException;
 import com.ait.app.model.Address;
 import com.ait.app.model.User;
@@ -104,4 +105,62 @@ public class AddressServiceImpl implements AddressService {
 
 		return responseList;
 	}
+
+	@Override
+	public Address updateAddress(int userId, int addressId, Address address) {
+			
+			
+	        if (!userRepository.existsById(userId)) {
+	            throw new CustomerException(
+	                    "User not found",
+	                    HttpStatus.NOT_FOUND
+	            );
+	        }
+
+	        Optional<Address> optionalAddress =
+	                addressRepository.findByIdAndUserId(addressId, userId);
+
+	        if (optionalAddress.isEmpty()) {
+	            throw new CustomerException("Address not found", 
+	            		HttpStatus.NOT_FOUND);
+	        }
+	        Address existingAddress = optionalAddress.get();
+
+	        
+	        existingAddress.setLabel(address.getLabel());
+	        existingAddress.setStreet(address.getStreet());
+	        existingAddress.setApartment(address.getApartment());
+	        existingAddress.setLandmark(address.getLandmark());
+	        existingAddress.setCity(address.getCity());
+	        existingAddress.setPostalCode(address.getPostalCode());
+	        
+	        
+	        existingAddress.setDeliveryInstructions
+	        (address.getDeliveryInstructions());
+
+	        
+	        return addressRepository.save(existingAddress);
+	}
+
+	@Override
+		public void deleteAddress(int userId, int addressId) {
+			if (!userRepository.existsById(userId)) {
+				throw new CustomerException("User Not Found",
+						HttpStatus.NOT_FOUND);
+			}
+			
+			Optional<Address> optionalAddress = addressRepository.
+					findByIdAndUserId(addressId, userId);
+			
+			if(optionalAddress.isEmpty()){
+				throw new CustomerException("Address Not Found", 
+						HttpStatus.BAD_REQUEST);
+			}
+			
+			Address address = optionalAddress.get();
+			addressRepository.delete(address);
+		
+	}
+
+	
 }
