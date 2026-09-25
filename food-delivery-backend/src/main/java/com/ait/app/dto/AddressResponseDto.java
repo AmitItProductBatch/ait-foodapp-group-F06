@@ -2,7 +2,6 @@ package com.ait.app.dto;
 
 public class AddressResponseDto {
 
-	
 	private String label;
 	private String street;
 	private String apartment;
@@ -11,8 +10,24 @@ public class AddressResponseDto {
 	private String postalCode;
 	private String deliveryInstructions;
 	private int userId;
+	private double latitude;
+	private double longitude;
 
-	
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 
 	public String getLabel() {
 		return label;
