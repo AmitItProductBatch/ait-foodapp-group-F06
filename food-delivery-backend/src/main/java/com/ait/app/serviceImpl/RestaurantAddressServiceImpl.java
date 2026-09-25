@@ -16,6 +16,7 @@ import com.ait.app.model.Restaurant;
 import com.ait.app.model.RestaurantAddress;
 import com.ait.app.repository.RestaurantAddressRepository;
 import com.ait.app.repository.RestaurantRepository;
+import com.ait.app.service.GeocodingService;
 import com.ait.app.service.RestaurantAddressService;
 
 @Service
@@ -26,7 +27,8 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 
 	@Autowired
 	RestaurantAddressRepository restaurantAddressRepository;
-
+    @Autowired
+    GeocodingService geocodingService;
 	@Override
 	public RestaurantAddressResponseDto addRestaurantAddress(int restaurantId, RestaurantAddressRequestDto requestDto) {
 
@@ -46,6 +48,17 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		address.setPinCode(requestDto.getPincode());
 		address.setRestaurant(restaurant);
 		address.setBuildingName(requestDto.getBuildingName());
+		String fullAddress =
+		        requestDto.getStreet() + ", "
+		        + requestDto.getCity() + ", "
+		        + requestDto.getState() + ", "
+		        + requestDto.getPincode() + ", India";
+
+		double[] coordinates =
+		        geocodingService.getCoordinates(fullAddress);
+
+		address.setLatitude(coordinates[0]);
+		address.setLongitude(coordinates[1]);
 
 		RestaurantAddress savedAddress = restaurantAddressRepository.save(address);
 
@@ -57,7 +70,8 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		restaurantAddressResponseDto.setState(savedAddress.getState());
 		restaurantAddressResponseDto.setStreet(savedAddress.getStreet());
 		restaurantAddressResponseDto.setBuildingName(savedAddress.getBuildingName());
-
+        restaurantAddressResponseDto.setLatitude(savedAddress.getLatitude());
+        restaurantAddressResponseDto.setLongitude(savedAddress.getLongitude());
 		return restaurantAddressResponseDto;
 
 	}
@@ -79,6 +93,8 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		restaurantAddressResponseDto.setRestaurantId(restaurantAddress.getRestaurant().getId());
 		restaurantAddressResponseDto.setState(restaurantAddress.getState());
 		restaurantAddressResponseDto.setStreet(restaurantAddress.getStreet());
+		restaurantAddressResponseDto.setLatitude(restaurantAddress.getLatitude());
+		restaurantAddressResponseDto.setLongitude(restaurantAddress.getLongitude());
 		return restaurantAddressResponseDto;
 
 	}
@@ -92,7 +108,7 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		}
 		RestaurantAddress restaurantAddress = o.get();
 		Optional<Restaurant> optional = restaurantRepository.findById(restaurantAddressRequestDto.getRestaurantId());
-		if (o.isEmpty()) {
+		if (optional.isEmpty()) {
 			throw new RestaurantException("restaurant not found", HttpStatus.NOT_FOUND);
 		}
 		Restaurant restaurant = optional.get();
@@ -103,6 +119,17 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		restaurantAddress.setRestaurant(restaurant);
 		restaurantAddress.setState(restaurantAddressRequestDto.getState());
 		restaurantAddress.setStreet(restaurantAddressRequestDto.getStreet());
+		String fullAddress =
+		        restaurantAddressRequestDto.getStreet() + ", "
+		        + restaurantAddressRequestDto.getCity() + ", "
+		        + restaurantAddressRequestDto.getState() + ", "
+		        + restaurantAddressRequestDto.getPincode() + ", India";
+
+		double[] coordinates =
+		        geocodingService.getCoordinates(fullAddress);
+
+		restaurantAddress.setLatitude(coordinates[0]);
+		restaurantAddress.setLongitude(coordinates[1]);
 		RestaurantAddress address = restaurantAddressRepository.save(restaurantAddress);
 		RestaurantAddressResponseDto restaurantAddressResponseDto = new RestaurantAddressResponseDto();
 
@@ -113,6 +140,8 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		restaurantAddressResponseDto.setRestaurantId(address.getRestaurant().getId());
 		restaurantAddressResponseDto.setState(address.getState());
 		restaurantAddressResponseDto.setStreet(address.getStreet());
+		restaurantAddressResponseDto.setLatitude(address.getLatitude());
+		restaurantAddressResponseDto.setLongitude(address.getLongitude());
 
 		return restaurantAddressResponseDto;
 	}
@@ -128,7 +157,7 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 		List<RestaurantAddress> list = restaurantAddressRepository.findByRestaurantId(restaurantId);
 		
 
-		restaurantAddressRepository.deleteById(restaurantId);
+		restaurantAddressRepository.deleteAll(list);
 
 	}
 
@@ -153,6 +182,8 @@ public class RestaurantAddressServiceImpl implements RestaurantAddressService {
 			restaurantAddressResponseDto.setRestaurantId(restaurantAddress.getRestaurant().getId());
 			restaurantAddressResponseDto.setState(restaurantAddress.getState());
 			restaurantAddressResponseDto.setStreet(restaurantAddress.getStreet());
+			restaurantAddressResponseDto.setLatitude(restaurantAddress.getLatitude());
+			restaurantAddressResponseDto.setLongitude(restaurantAddress.getLongitude());
 			responseList.add(restaurantAddressResponseDto);
 
 		}

@@ -18,6 +18,7 @@ import com.ait.app.model.User;
 import com.ait.app.repository.AddressRepository;
 import com.ait.app.repository.UserRepository;
 import com.ait.app.service.AddressService;
+import com.ait.app.service.GeocodingService;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -27,6 +28,8 @@ public class AddressServiceImpl implements AddressService {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private GeocodingService geocodingService;
 
 	@Override
 	public AddressResponseDto createAddress(int userId, AddressRequestDto addressRequestDto) {
@@ -57,6 +60,8 @@ public class AddressServiceImpl implements AddressService {
 		response.setPostalCode(savedAddress.getPostalCode());
 		response.setDeliveryInstructions(savedAddress.getDeliveryInstructions());
 		response.setUserId(userId);
+		response.setLatitude(savedAddress.getLatitude());
+		response.setLongitude(savedAddress.getLongitude());
 
 		return response;
 	}
@@ -66,8 +71,11 @@ public class AddressServiceImpl implements AddressService {
 		userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException("User not found", HttpStatus.NOT_FOUND));
 
-		Address address = addressRepository.findByIdAndUserId(addressId, userId)
-				.orElseThrow(() -> new AddressNotFoundException("Address not found"));
+		Optional<Address> o = addressRepository.findByIdAndUserId(addressId, userId);
+		if (o.isEmpty()) {
+			throw new AddressNotFoundException("address not found exception", HttpStatus.NOT_FOUND);
+		}
+		Address address = o.get();
 
 		AddressResponseDto response = new AddressResponseDto();
 
@@ -78,7 +86,9 @@ public class AddressServiceImpl implements AddressService {
 		response.setCity(address.getCity());
 		response.setPostalCode(address.getPostalCode());
 		response.setDeliveryInstructions(address.getDeliveryInstructions());
-		response.setUserId(userId);
+		response.setUserId(address.getUser().getId());
+		response.setLatitude(address.getLatitude());
+		response.setLongitude(address.getLongitude());
 
 		return response;
 
@@ -99,6 +109,8 @@ public class AddressServiceImpl implements AddressService {
 			addressResponseDto.setPostalCode(address.getPostalCode());
 			addressResponseDto.setStreet(address.getStreet());
 			addressResponseDto.setUserId(address.getUser().getId());
+			addressResponseDto.setLatitude(address.getLatitude());
+			addressResponseDto.setLongitude(address.getLongitude());
 			responseList.add(addressResponseDto);
 
 		}
@@ -108,59 +120,45 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public Address updateAddress(int userId, int addressId, Address address) {
-			
-			
-	        if (!userRepository.existsById(userId)) {
-	            throw new CustomerException(
-	                    "User not found",
-	                    HttpStatus.NOT_FOUND
-	            );
-	        }
 
-	        Optional<Address> optionalAddress =
-	                addressRepository.findByIdAndUserId(addressId, userId);
+		if (!userRepository.existsById(userId)) {
+			throw new CustomerException("User not found", HttpStatus.NOT_FOUND);
+		}
 
-	        if (optionalAddress.isEmpty()) {
-	            throw new CustomerException("Address not found", 
-	            		HttpStatus.NOT_FOUND);
-	        }
-	        Address existingAddress = optionalAddress.get();
+		Optional<Address> optionalAddress = addressRepository.findByIdAndUserId(addressId, userId);
 
-	        
-	        existingAddress.setLabel(address.getLabel());
-	        existingAddress.setStreet(address.getStreet());
-	        existingAddress.setApartment(address.getApartment());
-	        existingAddress.setLandmark(address.getLandmark());
-	        existingAddress.setCity(address.getCity());
-	        existingAddress.setPostalCode(address.getPostalCode());
-	        
-	        
-	        existingAddress.setDeliveryInstructions
-	        (address.getDeliveryInstructions());
+		if (optionalAddress.isEmpty()) {
+			throw new CustomerException("Address not found", HttpStatus.NOT_FOUND);
+		}
+		Address existingAddress = optionalAddress.get();
 
-	        
-	        return addressRepository.save(existingAddress);
+		existingAddress.setLabel(address.getLabel());
+		existingAddress.setStreet(address.getStreet());
+		existingAddress.setApartment(address.getApartment());
+		existingAddress.setLandmark(address.getLandmark());
+		existingAddress.setCity(address.getCity());
+		existingAddress.setPostalCode(address.getPostalCode());
+
+		existingAddress.setDeliveryInstructions(address.getDeliveryInstructions());
+
+		return addressRepository.save(existingAddress);
 	}
 
 	@Override
-		public void deleteAddress(int userId, int addressId) {
-			if (!userRepository.existsById(userId)) {
-				throw new CustomerException("User Not Found",
-						HttpStatus.NOT_FOUND);
-			}
-			
-			Optional<Address> optionalAddress = addressRepository.
-					findByIdAndUserId(addressId, userId);
-			
-			if(optionalAddress.isEmpty()){
-				throw new CustomerException("Address Not Found", 
-						HttpStatus.BAD_REQUEST);
-			}
-			
-			Address address = optionalAddress.get();
-			addressRepository.delete(address);
-		
+	public void deleteAddress(int userId, int addressId) {
+		if (!userRepository.existsById(userId)) {
+			throw new CustomerException("User Not Found", HttpStatus.NOT_FOUND);
+		}
+
+		Optional<Address> optionalAddress = addressRepository.findByIdAndUserId(addressId, userId);
+
+		if (optionalAddress.isEmpty()) {
+			throw new CustomerException("Address Not Found", HttpStatus.BAD_REQUEST);
+		}
+
+		Address address = optionalAddress.get();
+		addressRepository.delete(address);
+
 	}
 
-	
 }

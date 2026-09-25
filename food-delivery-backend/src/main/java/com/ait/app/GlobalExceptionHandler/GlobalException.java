@@ -16,6 +16,8 @@ import com.ait.app.exception.CustomerAddressException;
 import com.ait.app.exception.CustomerException;
 
 import com.ait.app.exception.CustomerProfileException;
+import com.ait.app.exception.DeliveryFeeRuleNotFoundException;
+import com.ait.app.exception.DeliveryRadiusExceededException;
 import com.ait.app.exception.DuplicateRoleException;
 import com.ait.app.exception.FoodCategoryException;
 import com.ait.app.exception.FoodItemException;
@@ -115,23 +117,40 @@ public class GlobalException {
 		return new ResponseEntity(invalidQuantityException.getErrorMessage(), invalidQuantityException.getHttpStatus());
 
 	}
-	
-	 @ExceptionHandler(FoodCategoryException.class)
-	    public ResponseEntity<String> handleFoodCategoryException(FoodCategoryException e) {
 
-	        return new ResponseEntity(e.getMessage(), e.getStatus());
-	
-	 }
-	 @ExceptionHandler(RestaurantAddressNotFoundException.class)
-	    public ResponseEntity<String> handleRestaurantAddressNotFoundException(RestaurantAddressNotFoundException restaurantAddressNotFoundException) {
+	@ExceptionHandler(FoodCategoryException.class)
+	public ResponseEntity<String> handleFoodCategoryException(FoodCategoryException e) {
 
-	        return new ResponseEntity(restaurantAddressNotFoundException.getErrormessage(),restaurantAddressNotFoundException.getHttpStatus());
-	
-	 }
-	 
-	 @ExceptionHandler(AddressNotFoundException.class)
-	 public ResponseEntity<String> handleAddressNotFound(AddressNotFoundException ex) {
-	     return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-	 }
+		return new ResponseEntity(e.getMessage(), e.getStatus());
 
-	 }
+	}
+
+	@ExceptionHandler(RestaurantAddressNotFoundException.class)
+	public ResponseEntity<String> handleRestaurantAddressNotFoundException(
+			RestaurantAddressNotFoundException restaurantAddressNotFoundException) {
+
+		return new ResponseEntity(restaurantAddressNotFoundException.getErrormessage(),
+				restaurantAddressNotFoundException.getHttpStatus());
+
+	}
+
+	@ExceptionHandler(AddressNotFoundException.class)
+	public ResponseEntity<String> handleAddressNotFound(AddressNotFoundException ex) {
+		return new ResponseEntity<>(ex.getErrorMessage(), HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(DeliveryRadiusExceededException.class)
+	public ResponseEntity<String> handleDeliveryRadiusExceededException(
+			DeliveryRadiusExceededException deliveryRadiusExceededException) {
+		return new ResponseEntity<String>(deliveryRadiusExceededException.getErrorMessage(),
+				deliveryRadiusExceededException.getHttpStatus());
+	}
+
+	@ExceptionHandler(DeliveryFeeRuleNotFoundException.class)
+	public ResponseEntity<String> handleDeliveryFeeRuleNotFoundException(
+			DeliveryFeeRuleNotFoundException deliveryFeeRuleNotFoundException) {
+		return new ResponseEntity<String>(deliveryFeeRuleNotFoundException.getErrormessage(),
+				deliveryFeeRuleNotFoundException.getHttpStatus());
+	}
+
+}

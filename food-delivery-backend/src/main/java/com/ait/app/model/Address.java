@@ -12,113 +12,121 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "addresses")
+public class Address {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-	@Entity
-	@Table(name="addresses")
-	public class Address {
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private int id;
-	   
+	private String label;
 
-	    private String label;
-	 
+	private String street;
 
-	    private String street;
-	    
-	    private String apartment;
-	    
-	    private String landmark;
-	    
-	   
-	    private String city;
-	    
-	    
-	    private String postalCode;
-	    
-	    private String deliveryInstructions;
-	    
-	    @ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name = "user_id", nullable = false)
-	    
-	    private User user;
+	private String apartment;
 
-		public int getId() {
-			return id;
-		}
+	private String landmark;
 
-		public void setId(int id) {
-			this.id = id;
-		}
+	private String city;
 
-		public String getLabel() {
-			return label;
-		}
+	private String postalCode;
 
-		public void setLabel(String label) {
-			this.label = label;
-		}
+	private String deliveryInstructions;
 
-		public String getStreet() {
-			return street;
-		}
+	private double latitude;
+	private double longitude;
 
-		public void setStreet(String street) {
-			this.street = street;
-		}
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
 
-		public String getApartment() {
-			return apartment;
-		}
+	private User user;
 
-		public void setApartment(String apartment) {
-			this.apartment = apartment;
-		}
-
-		public String getLandmark() {
-			return landmark;
-		}
-
-		public void setLandmark(String landmark) {
-			this.landmark = landmark;
-		}
-
-		public String getCity() {
-			return city;
-		}
-
-		public void setCity(String city) {
-			this.city = city;
-		}
-
-		public String getPostalCode() {
-			return postalCode;
-		}
-
-		public void setPostalCode(String postalCode) {
-			this.postalCode = postalCode;
-		}
-
-		public String getDeliveryInstructions() {
-			return deliveryInstructions;
-		}
-
-		public void setDeliveryInstructions(String deliveryInstructions) {
-			this.deliveryInstructions = deliveryInstructions;
-		}
-
-		public User getUser() {
-			return user;
-		}
-
-		public void setUser(User user) {
-			this.user = user;
-		}
-	    
-	        
-
-	   
-
+	public double getLatitude() {
+		return latitude;
 	}
 
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
 
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getApartment() {
+		return apartment;
+	}
+
+	public void setApartment(String apartment) {
+		this.apartment = apartment;
+	}
+
+	public String getLandmark() {
+		return landmark;
+	}
+
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+
+	public String getDeliveryInstructions() {
+		return deliveryInstructions;
+	}
+
+	public void setDeliveryInstructions(String deliveryInstructions) {
+		this.deliveryInstructions = deliveryInstructions;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+}
