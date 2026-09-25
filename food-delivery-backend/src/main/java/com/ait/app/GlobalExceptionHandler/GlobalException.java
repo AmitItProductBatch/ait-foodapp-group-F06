@@ -17,6 +17,7 @@ import com.ait.app.exception.CustomerException;
 
 import com.ait.app.exception.CustomerProfileException;
 import com.ait.app.exception.DeliveryFeeRuleNotFoundException;
+import com.ait.app.exception.DeliveryPartnerNotFoundException;
 import com.ait.app.exception.DeliveryRadiusExceededException;
 import com.ait.app.exception.DuplicateRoleException;
 import com.ait.app.exception.FoodCategoryException;
@@ -151,6 +152,10 @@ public class GlobalException {
 			DeliveryFeeRuleNotFoundException deliveryFeeRuleNotFoundException) {
 		return new ResponseEntity<String>(deliveryFeeRuleNotFoundException.getErrormessage(),
 				deliveryFeeRuleNotFoundException.getHttpStatus());
+	}
+	@ExceptionHandler(DeliveryPartnerNotFoundException.class)
+	ResponseEntity<String>handleDeliveryPartnerNotFoundException(DeliveryPartnerNotFoundException deliveryPartnerNotFoundException){
+		return new ResponseEntity<String>(deliveryPartnerNotFoundException.getErrorMessage(), deliveryPartnerNotFoundException.getHttpStatus());
 	}
 
 }
