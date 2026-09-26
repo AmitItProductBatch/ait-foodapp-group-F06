@@ -89,4 +89,49 @@ public class DeliveryPartnerServiceImpl implements DeliveryPartnerService {
 		return deliveryPartnerList;
 	}
 
+	@Override
+	public DeliveryPartnerResponseDto updateDeliveryPartner(int deliveryPartnerId,
+			DeliveryPartnerRequestDto deliveryPartnerRequestDto) {
+
+		Optional<DeliveryPartner> optional = deliveryPartnerRepository.findById(deliveryPartnerId);
+
+		if (optional.isEmpty()) {
+
+			throw new DeliveryPartnerNotFoundException("delivery partner not found", HttpStatus.NOT_FOUND);
+		}
+
+		DeliveryPartner partner = optional.get();
+
+		partner.setName(deliveryPartnerRequestDto.getName());
+		partner.setMobileNo(deliveryPartnerRequestDto.getMobileNo());
+		partner.setEmail(deliveryPartnerRequestDto.getEmail());
+		partner.setVechicleType(deliveryPartnerRequestDto.getVechicleType());
+		partner.setUpdatedAt(LocalDateTime.now());
+
+		partner = deliveryPartnerRepository.save(partner);
+
+		DeliveryPartnerResponseDto response = new DeliveryPartnerResponseDto();
+
+		response.setDeliveryPartnerId(partner.getId());
+		response.setName(partner.getName());
+		response.setMobileNo(partner.getMobileNo());
+		response.setEmail(partner.getEmail());
+		response.setVechicleType(partner.getVechicleType());
+		response.setStatus(partner.getStatus());
+		response.setActive(partner.isActive());
+		response.setCreatedAt(partner.getCreatedAt());
+		response.setUpdatedAt(partner.getUpdatedAt());
+
+		return response;
+	}
+
+	@Override
+	public void deleteDeliveryPartner(int deliveryPartnerId) {
+
+		if (!deliveryPartnerRepository.existsById(deliveryPartnerId)) {
+			throw new DeliveryPartnerNotFoundException("delivery partner not found", HttpStatus.NOT_FOUND);
+		}
+		deliveryPartnerRepository.deleteById(deliveryPartnerId);
+
+	}
 }

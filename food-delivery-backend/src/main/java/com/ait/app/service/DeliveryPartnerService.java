@@ -11,4 +11,9 @@ public interface DeliveryPartnerService {
 	DeliveryPartnerResponseDto getDeliveryPartner(int deliveryPartnerId);
 
 	List<DeliveryPartnerResponseDto> getAllDeliveryPartner();
+
+	DeliveryPartnerResponseDto updateDeliveryPartner(int deliveryPartnerId,
+			DeliveryPartnerRequestDto deliveryPartnerRequestDto);
+
+	void deleteDeliveryPartner(int deliveryPartnerId);
 }
