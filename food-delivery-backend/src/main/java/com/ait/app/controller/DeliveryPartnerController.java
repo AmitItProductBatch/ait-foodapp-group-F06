@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ait.app.dto.DeliveryPartnerAvailabilityRequestDto;
 import com.ait.app.dto.DeliveryPartnerRequestDto;
 import com.ait.app.dto.DeliveryPartnerResponseDto;
 import com.ait.app.service.DeliveryPartnerService;
@@ -50,10 +52,9 @@ public class DeliveryPartnerController {
 		List<DeliveryPartnerResponseDto> list = deliveryPartnerService.getAllDeliveryPartner();
 		return new ResponseEntity(list, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("updateDeliveryPartner/{deliveryPartnerId}")
-	ResponseEntity updateDeliveryPartner(
-			@PathVariable int deliveryPartnerId,
+	ResponseEntity updateDeliveryPartner(@PathVariable int deliveryPartnerId,
 			@RequestBody DeliveryPartnerRequestDto deliveryPartnerRequestDto) {
 
 		DeliveryPartnerResponseDto deliveryPartnerResponseDto = deliveryPartnerService
@@ -61,14 +62,33 @@ public class DeliveryPartnerController {
 
 		return new ResponseEntity(deliveryPartnerResponseDto, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("deleteDeliveryPartner/{deliveryPartnerId}")
-    ResponseEntity deleteDeliveryPartner(@PathVariable int deliveryPartnerId) {
+	ResponseEntity deleteDeliveryPartner(@PathVariable int deliveryPartnerId) {
 
-        deliveryPartnerService.deleteDeliveryPartner(deliveryPartnerId);
+		deliveryPartnerService.deleteDeliveryPartner(deliveryPartnerId);
 
-        return new ResponseEntity(
-                "Delivery partner deleted successfully",
-                HttpStatus.OK);
-    }
+		return new ResponseEntity("Delivery partner deleted successfully", HttpStatus.OK);
+	}
+
+	@PatchMapping("updateAvailability/{deliveryPartnerId}")
+	ResponseEntity updateAvailability(@PathVariable int deliveryPartnerId,
+			@RequestBody DeliveryPartnerAvailabilityRequestDto deliveryPartnerAvailabilityRequestDto) {
+
+		DeliveryPartnerResponseDto deliveryPartnerResponseDto = deliveryPartnerService
+				.updateDeliveryPartnerAvailability(deliveryPartnerId, deliveryPartnerAvailabilityRequestDto);
+
+		return new ResponseEntity(deliveryPartnerResponseDto, HttpStatus.OK);
+
+	}
+
+	@GetMapping("getAvailableDp")
+	ResponseEntity getAvailableDeliveryPartners() {
+
+		List<DeliveryPartnerResponseDto> deliveryPartnerResponseDto = deliveryPartnerService
+				.getAvailableDeliveryPartner();
+
+		return new ResponseEntity(deliveryPartnerResponseDto, HttpStatus.OK);
+
+	}
 }
