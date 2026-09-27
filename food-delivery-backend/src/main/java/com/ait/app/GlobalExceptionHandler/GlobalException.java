@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.ait.app.exception.AddressNotFoundException;
-
+import com.ait.app.exception.AvailableDeliveryPartnerNotFound;
 import com.ait.app.exception.CartItemNotFoundException;
 import com.ait.app.exception.CartItemServiceException;
 import com.ait.app.exception.CartNotFoundException;
@@ -153,9 +153,19 @@ public class GlobalException {
 		return new ResponseEntity<String>(deliveryFeeRuleNotFoundException.getErrormessage(),
 				deliveryFeeRuleNotFoundException.getHttpStatus());
 	}
+
 	@ExceptionHandler(DeliveryPartnerNotFoundException.class)
-	ResponseEntity<String>handleDeliveryPartnerNotFoundException(DeliveryPartnerNotFoundException deliveryPartnerNotFoundException){
-		return new ResponseEntity<String>(deliveryPartnerNotFoundException.getErrorMessage(), deliveryPartnerNotFoundException.getHttpStatus());
+	ResponseEntity<String> handleDeliveryPartnerNotFoundException(
+			DeliveryPartnerNotFoundException deliveryPartnerNotFoundException) {
+		return new ResponseEntity<String>(deliveryPartnerNotFoundException.getErrorMessage(),
+				deliveryPartnerNotFoundException.getHttpStatus());
+	}
+
+	@ExceptionHandler(AvailableDeliveryPartnerNotFound.class)
+	ResponseEntity<String> handleAvailableDeliveryPartnerNotFoundException(
+			AvailableDeliveryPartnerNotFound availableDeliveryPartnerNotFound) {
+		return new ResponseEntity<String>(availableDeliveryPartnerNotFound.getErrorMessage(),
+				availableDeliveryPartnerNotFound.getHttpStatus());
 	}
 
 }

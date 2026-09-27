@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.ait.app.dto.DeliveryPartnerAvailabilityRequestDto;
 import com.ait.app.dto.DeliveryPartnerRequestDto;
 import com.ait.app.dto.DeliveryPartnerResponseDto;
+import com.ait.app.exception.AvailableDeliveryPartnerNotFound;
 import com.ait.app.exception.DeliveryPartnerNotFoundException;
+import com.ait.app.model.AvailabilityStatus;
 import com.ait.app.model.DeliveryPartner;
 import com.ait.app.repository.DeliveryPartnerRepository;
 import com.ait.app.service.DeliveryPartnerService;
@@ -133,5 +136,62 @@ public class DeliveryPartnerServiceImpl implements DeliveryPartnerService {
 		}
 		deliveryPartnerRepository.deleteById(deliveryPartnerId);
 
+	}
+
+	@Override
+	public DeliveryPartnerResponseDto updateDeliveryPartnerAvailability(int deliveryPartnerId,
+			DeliveryPartnerAvailabilityRequestDto deliveryPartnerAvailabilityRequestDto) {
+		Optional<DeliveryPartner> o = deliveryPartnerRepository.findById(deliveryPartnerId);
+		if (o.isEmpty()) {
+
+			throw new DeliveryPartnerNotFoundException("delivery partner not found", HttpStatus.NOT_FOUND);
+		}
+		DeliveryPartner deliveryPartner = o.get();
+		deliveryPartner.setAvailabilityStatus(deliveryPartnerAvailabilityRequestDto.getAvailabilityStatus());
+
+		DeliveryPartner savedDeliveryPartner = deliveryPartnerRepository.save(deliveryPartner);
+		DeliveryPartnerResponseDto deliveryPartnerResponseDto = new DeliveryPartnerResponseDto();
+		deliveryPartnerResponseDto.setDeliveryPartnerId(savedDeliveryPartner.getId());
+		deliveryPartnerResponseDto.setAvailabilityStatus(savedDeliveryPartner.getAvailabilityStatus().name());
+		deliveryPartnerResponseDto.setEmail(savedDeliveryPartner.getEmail());
+		deliveryPartnerResponseDto.setMobileNo(savedDeliveryPartner.getMobileNo());
+		deliveryPartnerResponseDto.setName(savedDeliveryPartner.getName());
+		deliveryPartnerResponseDto.setStatus(savedDeliveryPartner.getStatus());
+		deliveryPartnerResponseDto.setVechicleType(savedDeliveryPartner.getVechicleType());
+		deliveryPartnerResponseDto.setActive(savedDeliveryPartner.isActive());
+		deliveryPartnerResponseDto.setCreatedAt(savedDeliveryPartner.getCreatedAt());
+		deliveryPartnerResponseDto.setUpdatedAt(savedDeliveryPartner.getUpdatedAt());
+
+		return deliveryPartnerResponseDto;
+	}
+
+	@Override
+	public List<DeliveryPartnerResponseDto> getAvailableDeliveryPartner() {
+		List<DeliveryPartner> list = deliveryPartnerRepository
+				.findByActiveTrueAndAvailabilityStatus(AvailabilityStatus.AVAILABLE);
+		if(list.isEmpty()) {
+			
+			throw new AvailableDeliveryPartnerNotFound("delivery partner not available", HttpStatus.NOT_FOUND);
+		}
+		
+		List<DeliveryPartnerResponseDto> responseList = new ArrayList();
+		for (DeliveryPartner deliveryPartner : list) {
+
+			DeliveryPartnerResponseDto deliveryPartnerResponseDto = new DeliveryPartnerResponseDto();
+			deliveryPartnerResponseDto.setActive(deliveryPartner.isActive());
+			deliveryPartnerResponseDto.setAvailabilityStatus(deliveryPartner.getAvailabilityStatus().name());
+			deliveryPartnerResponseDto.setCreatedAt(deliveryPartner.getCreatedAt());
+			deliveryPartnerResponseDto.setUpdatedAt(deliveryPartner.getUpdatedAt());
+			deliveryPartnerResponseDto.setDeliveryPartnerId(deliveryPartner.getId());
+			deliveryPartnerResponseDto.setEmail(deliveryPartner.getEmail());
+			deliveryPartnerResponseDto.setMobileNo(deliveryPartner.getMobileNo());
+			deliveryPartnerResponseDto.setStatus(deliveryPartner.getStatus());
+			deliveryPartnerResponseDto.setVechicleType(deliveryPartner.getVechicleType());
+
+			deliveryPartnerResponseDto.setName(deliveryPartner.getName());
+			responseList.add(deliveryPartnerResponseDto);
+
+		}
+		return responseList;
 	}
 }

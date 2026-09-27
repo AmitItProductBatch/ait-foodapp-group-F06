@@ -12,7 +12,15 @@ public class DeliveryPartnerResponseDto {
 	private boolean active;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+	private String availabilityStatus;
 	
+	
+	public String getAvailabilityStatus() {
+		return availabilityStatus;
+	}
+	public void setAvailabilityStatus(String availabilityStatus) {
+		this.availabilityStatus = availabilityStatus;
+	}
 	public int getDeliveryPartnerId() {
 		return deliveryPartnerId;
 	}
