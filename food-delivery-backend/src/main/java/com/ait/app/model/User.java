@@ -31,61 +31,55 @@ public class User {
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Address> addresses;
-
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+	private List<Order> order;
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getAddress() {
 		return address;
 	}
-
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public List<Role> getRole() {
 		return role;
 	}
-
 	public void setRole(List<Role> role) {
 		this.role = role;
 	}
-
 	public Cart getCart() {
 		return cart;
 	}
-
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
-
 	public List<Address> getAddresses() {
 		return addresses;
 	}
-
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
+	}
+	public List<Order> getOrder() {
+		return order;
+	}
+	public void setOrder(List<Order> order) {
+		this.order = order;
 	}
 	
 	
