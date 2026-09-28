@@ -24,6 +24,7 @@ import com.ait.app.exception.FoodCategoryException;
 import com.ait.app.exception.FoodItemException;
 import com.ait.app.exception.FoodItemNotFoundException;
 import com.ait.app.exception.InvalidQuantityException;
+import com.ait.app.exception.OrderNotFoundException;
 import com.ait.app.exception.RestaurantAddressNotFoundException;
 import com.ait.app.exception.RestaurantException;
 import com.ait.app.exception.RoleValidationException;
@@ -167,5 +168,15 @@ public class GlobalException {
 		return new ResponseEntity<String>(availableDeliveryPartnerNotFound.getErrorMessage(),
 				availableDeliveryPartnerNotFound.getHttpStatus());
 	}
+	@ExceptionHandler(OrderNotFoundException.class)
+	ResponseEntity<String> handleOrderNotFoundException(
+	        OrderNotFoundException orderNotFoundException) {
+
+	    return new ResponseEntity<String>(
+	            orderNotFoundException.getErrorMessage(),
+	            orderNotFoundException.getHttpStatus());
+	}	
+	
+		
 
 }

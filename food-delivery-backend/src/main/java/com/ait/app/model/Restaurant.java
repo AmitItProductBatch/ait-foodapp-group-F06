@@ -11,8 +11,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.Data;
 
 @Entity
+
 public class Restaurant {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +39,8 @@ public class Restaurant {
 	private List<FoodCategory> foodCategories;
 	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
 	private List<RestaurantAddress> restaurantAddress;
+	@OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL)
+	private List<Order> order;
 	public int getId() {
 		return id;
 	}
@@ -103,7 +107,13 @@ public class Restaurant {
 	public void setRestaurantAddress(List<RestaurantAddress> restaurantAddress) {
 		this.restaurantAddress = restaurantAddress;
 	}
-
+	public List<Order> getOrder() {
+		return order;
+	}
+	public void setOrder(List<Order> order) {
+		this.order = order;
+	}
+	
 	
 
 }

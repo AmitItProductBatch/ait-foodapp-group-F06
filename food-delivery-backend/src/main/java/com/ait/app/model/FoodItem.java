@@ -30,6 +30,8 @@ public class FoodItem {
 	private Restaurant restaurant;
 	@OneToMany(mappedBy = "foodItem",cascade = CascadeType.ALL)
 	private List<Cart> cart;
+	@OneToMany(mappedBy = "foodItem",cascade = CascadeType.ALL)
+	private List<OrderItem> orderItem;
 	public int getId() {
 		return id;
 	}
@@ -51,8 +53,8 @@ public class FoodItem {
 	public int getPrice() {
 		return price;
 	}
-	public void setPrice(int long1) {
-		this.price = long1;
+	public void setPrice(int price) {
+		this.price = price;
 	}
 	public Boolean getAvailability() {
 		return availability;
@@ -78,6 +80,13 @@ public class FoodItem {
 	public void setCart(List<Cart> cart) {
 		this.cart = cart;
 	}
-
+	public List<OrderItem> getOrderItem() {
+		return orderItem;
+	}
+	public void setOrderItem(List<OrderItem> orderItem) {
+		this.orderItem = orderItem;
+	}
+	
+	
 	
 }
