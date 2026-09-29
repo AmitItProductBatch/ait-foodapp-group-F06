@@ -24,7 +24,6 @@ import com.ait.app.service.OrderService;
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
 
-
 	@Autowired
 	private OrderItemRepository orderItemRepository;
 
@@ -59,7 +58,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 		orderItem.setOrder(order);
 		orderItem.setFoodItem(foodItem);
-		orderItem.setFoodName(orderItemRequestDto.getFoodName());
+
 		orderItem.setQuantity(orderItemRequestDto.getQuantity());
 		orderItem.setUnitPrice(orderItemRequestDto.getUnitPrice());
 
@@ -72,13 +71,12 @@ public class OrderItemServiceImpl implements OrderItemService {
 		OrderItemResponseDto response = new OrderItemResponseDto();
 
 		response.setOrderItemId(savedOrderItem.getId());
-		response.setFoodName(savedOrderItem.getFoodName());
+		response.setFoodItemId(savedOrderItem.getFoodItem().getName());
 		response.setQuantity(savedOrderItem.getQuantity());
 		response.setUnitPrice(savedOrderItem.getUnitPrice());
 		response.setTotalPrice(savedOrderItem.getTotalPrice());
+		
 
 		return response;
 	}
 }
-
-

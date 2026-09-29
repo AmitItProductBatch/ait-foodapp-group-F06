@@ -23,4 +23,16 @@ public class OrderController {
 
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/{orderId}")
+	public ResponseEntity<OrderResponseDto> getOrderDetails(
+	        @PathVariable int orderId) {
+
+	    OrderResponseDto response = orderService.getOrderDetails(orderId);
+
+	    return new ResponseEntity(response, HttpStatus.OK);
+	}
+	
+	
+	
 }

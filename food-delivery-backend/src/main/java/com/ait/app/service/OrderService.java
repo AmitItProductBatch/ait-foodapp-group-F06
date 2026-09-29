@@ -6,5 +6,7 @@ import com.ait.app.dto.OrderResponseDto;
 public interface OrderService {
 
 	OrderResponseDto CreateOrder(OrderRequestDto orderRequestDto);
+	
+	OrderResponseDto getOrderDetails(int orderId);
 
 }

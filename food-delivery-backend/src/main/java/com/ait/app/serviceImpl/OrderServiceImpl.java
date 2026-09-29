@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.ait.app.dto.OrderItemResponseDto;
 import com.ait.app.dto.OrderRequestDto;
 import com.ait.app.dto.OrderResponseDto;
 import com.ait.app.exception.AddressNotFoundException;
 import com.ait.app.exception.CartNotFoundException;
+import com.ait.app.exception.OrderNotFoundException;
 import com.ait.app.exception.RestaurantException;
 import com.ait.app.exception.UserNotFoundException;
 import com.ait.app.model.Address;
@@ -60,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
 
 		List<Cart> cartList = cartRepository.findByUserId(user.getId());
 
-		if ( cartList.isEmpty()) {
+		if (cartList.isEmpty()) {
 			throw new CartNotFoundException("Cart is empty", HttpStatus.NOT_FOUND);
 		}
 
@@ -95,11 +97,9 @@ public class OrderServiceImpl implements OrderService {
 
 		order.setDeliveryInstructions(orderRequestDto.getDeliveryInstructions());
 		order.setTotalAmount(totalAmount);
-		
-
 
 		Order savedOrder = orderRepository.save(order);
-		List<OrderItem> orderItems = new ArrayList<>();
+		List<OrderItem> orderItems = new ArrayList();
 
 		for (Cart cart : cartList) {
 
@@ -116,14 +116,64 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		orderItemRepository.saveAll(orderItems);
-	//	 cartRepository.deleteAll(cartList);
+		// cartRepository.deleteAll(cartList);
 
 		OrderResponseDto response = new OrderResponseDto();
 
 		response.setOrderId(savedOrder.getId());
 		response.setTotalAmount(savedOrder.getTotalAmount());
 		response.setStatus(savedOrder.getStatus());
+		response.setAddressId(savedOrder.getAddress().getId());
+		response.setRestaurantId(savedOrder.getRestaurant().getId());
+		response.setUserId(savedOrder.getUser().getId());
+		List<OrderItemResponseDto> itemResponseList = new ArrayList();
+		for (OrderItem orderItem : savedOrder.getOrderItems()) {
+
+			OrderItemResponseDto itemDto = new OrderItemResponseDto();
+			itemDto.setFoodItemId(orderItem.getFoodItem().getName());
+			itemDto.setOrderItemId(orderItem.getId());
+			itemDto.setQuantity(orderItem.getQuantity());
+			itemDto.setTotalPrice(orderItem.getTotalPrice());
+			itemDto.setUnitPrice(orderItem.getUnitPrice());
+			itemResponseList.add(itemDto);
+		}
+		response.setItems(itemResponseList);
 
 		return response;
+	}
+
+	@Override
+	public OrderResponseDto getOrderDetails(int orderId) {
+		Optional<Order> o = orderRepository.findById(orderId);
+
+		if (o.isEmpty()) {
+
+			throw new OrderNotFoundException("order is not there ", HttpStatus.NOT_FOUND);
+		}
+		Order order = o.get();
+		OrderResponseDto orderResponseDto = new OrderResponseDto();
+		orderResponseDto.setAddressId(order.getAddress().getId());
+
+		orderResponseDto.setOrderId(order.getId());
+		orderResponseDto.setRestaurantId(order.getRestaurant().getId());
+		orderResponseDto.setStatus(order.getStatus());
+		orderResponseDto.setTotalAmount(order.getTotalAmount());
+		orderResponseDto.setUserId(order.getUser().getId());
+		List<OrderItem> list = orderItemRepository.findByOrderId(orderId);
+		List<OrderItemResponseDto> itemResponseList = new ArrayList<>();
+		for (OrderItem orderItem : list) {
+			OrderItemResponseDto dto = new OrderItemResponseDto();
+			dto.setFoodItemId(orderItem.getFoodItem().getName());
+			dto.setOrderItemId(orderItem.getId());
+			dto.setQuantity(orderItem.getQuantity());
+
+			dto.setUnitPrice(orderItem.getUnitPrice());
+			double itemTotal = orderItem.getUnitPrice() * orderItem.getQuantity();
+			dto.setTotalPrice(orderItem.getTotalPrice());
+			itemResponseList.add(dto);
+			orderResponseDto.setItems(itemResponseList);
+
+		}
+		return orderResponseDto;
 	}
 }
