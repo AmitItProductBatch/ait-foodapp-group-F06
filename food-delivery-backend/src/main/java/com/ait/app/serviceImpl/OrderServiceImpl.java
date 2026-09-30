@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.ait.app.dto.OrderHistoryResponseDto;
 import com.ait.app.dto.OrderItemResponseDto;
 import com.ait.app.dto.OrderRequestDto;
 import com.ait.app.dto.OrderResponseDto;
@@ -176,4 +177,81 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return orderResponseDto;
 	}
+
+	@Override
+	public List<OrderHistoryResponseDto> getOrderHistory(int userId) {
+		List<Order> list = orderRepository.findByUserId(userId);
+
+		List<OrderHistoryResponseDto> l = new ArrayList<>();
+		for (Order order : list) {
+
+			OrderHistoryResponseDto dto = new OrderHistoryResponseDto();
+			dto.setOrderId(order.getId());
+			dto.setOrderTime(order.getOrderTime());
+			dto.setPaymentMethod(order.getPaymentMethod());
+			dto.setRestaurantId(order.getRestaurant().getId());
+			dto.setStatus(order.getStatus());
+			dto.setTotalAmount(order.getTotalAmount());
+			dto.setUserId(order.getUser().getId());
+			List<Integer> orderItemIds = new ArrayList<>();
+
+			for (OrderItem orderItem : order.getOrderItems()) {
+				orderItemIds.add(orderItem.getId());
+			}
+
+			dto.setOrderItemId(orderItemIds);
+			l.add(dto);
+		}
+
+		return l;
+	}
+
+	@Override
+	public OrderResponseDto updateOrder(int orderId, OrderRequestDto orderRequestDto) {
+		Optional<Order> o = orderRepository.findById(orderId);
+		if (o.isEmpty()) {
+			throw new OrderNotFoundException("order not found", HttpStatus.NOT_FOUND);
+		}
+		Order order = o.get();
+		Optional<Address> optionalAddress = addressRepository.findById(orderRequestDto.getAddressId());
+		if (optionalAddress.isEmpty()) {
+			throw new AddressNotFoundException("address not found", HttpStatus.NOT_FOUND);
+		}
+		Address address = optionalAddress.get();
+		Optional<Restaurant> optional = restaurantRepository.findById(orderRequestDto.getRestaurantId());
+		if (optional.isEmpty()) {
+			throw new RestaurantException("restaurant not available", HttpStatus.NOT_FOUND);
+
+		}
+		Restaurant restaurant = optional.get();
+		Optional<User> optionalUser = userRepository.findById(orderRequestDto.getUserId());
+		if (optionalUser.isEmpty()) {
+			throw new UserNotFoundException("user not found", HttpStatus.NOT_FOUND);
+		}
+		User user = optionalUser.get();
+		order.setAddress(address);
+		order.setDeliveryInstructions(orderRequestDto.getDeliveryInstructions());
+		order.setPaymentMethod(orderRequestDto.getPaymentMethod());
+		order.setRestaurant(restaurant);
+		order.setTotalAmount(orderRequestDto.getTotalAmount());
+		order.setUser(user);
+		Order order2 = orderRepository.save(order);
+		OrderResponseDto dto = new OrderResponseDto();
+		dto.setAddressId(order2.getAddress().getId());
+
+		dto.setOrderId(order2.getId());
+		dto.setRestaurantId(order2.getRestaurant().getId());
+		dto.setStatus(order2.getStatus());
+		dto.setTotalAmount(order2.getTotalAmount());
+		dto.setUserId(order2.getUser().getId());
+		List<OrderItemResponseDto> items = new ArrayList<>();
+		for (OrderItem orderItem : order2.getOrderItems()) {
+			OrderItemResponseDto orderItemResponseDto = new OrderItemResponseDto();
+			orderItemResponseDto.setOrderItemId(orderItem.getId());
+			items.add(orderItemResponseDto);
+		}
+
+		return dto;
+	}
+
 }
