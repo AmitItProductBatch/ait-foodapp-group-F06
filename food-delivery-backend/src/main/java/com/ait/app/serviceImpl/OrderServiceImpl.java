@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ait.app.dto.OrderHistoryResponseDto;
 import com.ait.app.dto.OrderItemResponseDto;
@@ -53,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
 	RestaurantRepository restaurantRepository;
 
 	@Override
+	@Transactional
 	public OrderResponseDto CreateOrder(OrderRequestDto orderRequestDto) {
 		Optional<User> o = userRepository.findById(orderRequestDto.getUserId());
 		if (o.isEmpty()) {
