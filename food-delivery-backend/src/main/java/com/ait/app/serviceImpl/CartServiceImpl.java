@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ait.app.dto.CartDto;
 import com.ait.app.dto.CartItemResponseDto;
@@ -39,6 +40,7 @@ public class CartServiceImpl implements CartService {
 	CartItemRepository cartItemRepository;
 
 	@Override
+	@Transactional
 	public CartDto createCart(CartDto cartDto) {
 		Cart cart = new Cart();
 		Optional<FoodItem> o = foodItemRepository.findById(cartDto.getFoodItemId());
@@ -109,6 +111,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteCart(int userId) {
 
 		List<Cart> cartList = cartRepository.findByUserId(userId);
